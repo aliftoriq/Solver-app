@@ -1,0 +1,19 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Tema utama (dipakai di semua activity, kecuali splash) -->
+    <style name="Theme.Solvr" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Sesuaikan dengan style app kamu -->
+    </style>
+
+    <!-- Tema khusus SplashActivity -->
+    <style name="Theme.Solvr.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Solvr" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    </style>
+
+</resources>

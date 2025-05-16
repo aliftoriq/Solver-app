@@ -1,0 +1,39 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Fragment Container -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_nav"/>
+
+    <!-- Center Logo -->
+    <ImageView
+        android:id="@+id/center_logo"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:src="@drawable/icon_solver"
+        android:layout_alignBottom="@id/bottom_nav"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:elevation="10dp"
+        android:clickable="false"
+        android:focusable="false" />
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:paddingVertical="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemIconTint="@color/bottom_nav_selector"
+        app:itemTextColor="@color/bottom_nav_selector"
+        android:background="@color/white"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu"/>
+</RelativeLayout>
