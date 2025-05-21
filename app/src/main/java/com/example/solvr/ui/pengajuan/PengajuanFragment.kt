@@ -3,6 +3,7 @@ package com.example.solvr.ui.pengajuan
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.Handler
@@ -15,13 +16,12 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
-import androidx.core.os.postDelayed
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.solvr.R
 import com.example.solvr.models.LoanDTO
@@ -31,8 +31,8 @@ import com.example.yourapp.utils.SwitchAllertCustom
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputEditText
 import java.text.NumberFormat
 import java.util.Locale
@@ -54,6 +54,13 @@ class PengajuanFragment : Fragment() {
     private lateinit var tvRekening: TextView
     private lateinit var tvActiveLoan: TextView
 
+    private lateinit var tvReviewStatus: TextView
+    private lateinit var tvTangal: TextView
+    private lateinit var tvJumlahPinjaman: TextView
+    private lateinit var tvCicilan: TextView
+
+    private lateinit var activeLoanApplicationContainer: FrameLayout
+
     private lateinit var shimmerLayout: ShimmerFrameLayout
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -71,6 +78,7 @@ class PengajuanFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_pengajuan, container, false)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val animTop = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_top)
         val animBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
@@ -79,7 +87,6 @@ class PengajuanFragment : Fragment() {
         val animFadeIn = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
         val animFadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
 
-// Terapkan animasi ke masing-masing view
         view.findViewById<FrameLayout>(R.id.headerContainer).startAnimation(animBottom)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
@@ -104,6 +111,13 @@ class PengajuanFragment : Fragment() {
         tvRekening = view.findViewById(R.id.etRekening)
         tvActiveLoan = view.findViewById(R.id.ecActiveLoan)
 
+        tvReviewStatus = view.findViewById(R.id.tvReviewStatus)
+        tvTangal = view.findViewById(R.id.tvTanggal)
+        tvJumlahPinjaman = view.findViewById(R.id.tvJumlahPinjaman)
+        tvCicilan = view.findViewById(R.id.tvCicilan)
+        activeLoanApplicationContainer = view.findViewById(R.id.activeLoanApplicationContainer)
+
+        activeLoanApplicationContainer.visibility = View.GONE
 
         // Update nominal pinjaman
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -117,9 +131,29 @@ class PengajuanFragment : Fragment() {
             override fun onStopTrackingTouch(sb: SeekBar?) {}
         })
 
+        val allTenorButtons = listOf(
+            view.findViewById<MaterialButton>(R.id.btnTenor3),
+            view.findViewById<MaterialButton>(R.id.btnTenor6),
+            view.findViewById<MaterialButton>(R.id.btnTenor9),
+            view.findViewById<MaterialButton>(R.id.btnTenor12)
+        )
+
         // Pilih tenor
         toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
+
+                allTenorButtons.forEach { button ->
+                    if (button.id == checkedId) {
+                        // Change selected button to primary color
+                        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.secondary))
+                        button.setTextColor(Color.WHITE)
+                    } else {
+                        // Reset unselected buttons to secondary color
+                        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.primary))
+                        button.setTextColor(Color.WHITE )
+                    }
+                }
+
                 selectedTenor = when (checkedId) {
                     R.id.btnTenor3 -> 3
                     R.id.btnTenor6 -> 6
@@ -201,6 +235,13 @@ class PengajuanFragment : Fragment() {
                     Toast.makeText(requireContext(), errorCode, Toast.LENGTH_SHORT).show()
                 }
             }
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                loanCard.visibility = View.VISIBLE
+                loanCard.startAnimation(animBottom)
+                shimmerLayout.stopShimmer()
+                shimmerLayout.visibility = View.GONE
+            }, 1000)
         }
 
 
@@ -216,11 +257,22 @@ class PengajuanFragment : Fragment() {
 
                 interestRate = (it.data?.plafonPackage?.interestRate ?: 0.015) as Double
 
-                val remainingLoan = it.data?.remainingLoan?.toString()?.toDoubleOrNull() ?: 10_000_000.0
-                val maxLoan = maxOf(remainingLoan.toInt(), 1_000_000)
+                val remainingLoan = it.data?.remainingPlafon?.toString()?.toDoubleOrNull() ?: 10_000_000.0
+                val maxLoan = maxOf(remainingLoan.toInt())
                 seekBar.max = maxLoan
 
+               if (it.data?.activeLoanApplication != null){
+                   tvReviewStatus.text = it.data.activeLoanApplication.status ?: "-"
+                   tvTangal.text = it.data.activeLoanApplication.requestedAt ?: "-"
+                   tvJumlahPinjaman.text = formatRupiah((it.data.activeLoanApplication.loanAmount ?: 0.0).toInt())
+                   tvCicilan.text = formatRupiah((it.data.activeLoanApplication.monthlyPayment ?: 0.0).toInt())
+               }
+
                 Handler(Looper.getMainLooper()).postDelayed({
+                    if (it.data?.activeLoanApplication != null) {
+                        activeLoanApplicationContainer.visibility = View.VISIBLE
+                        activeLoanApplicationContainer.startAnimation(animFadeIn)
+                    }
                     loanCard.visibility = View.VISIBLE
                     loanCard.startAnimation(animBottom)
                     shimmerLayout.stopShimmer()
@@ -232,15 +284,6 @@ class PengajuanFragment : Fragment() {
 
         viewModel.fetchLoanSummary()
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) { msg ->
-            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-            Handler(Looper.getMainLooper()).postDelayed({
-                loanCard.visibility = View.VISIBLE
-                loanCard.startAnimation(animBottom)
-                shimmerLayout.stopShimmer()
-                shimmerLayout.visibility = View.GONE
-            }, 1000)
-        }
 
     }
 

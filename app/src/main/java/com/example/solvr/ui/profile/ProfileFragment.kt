@@ -13,6 +13,8 @@ import com.example.solvr.ui.auth.LoginActivity
 import com.example.solvr.ui.history.HistoryActivity
 import com.example.solvr.ui.profile.EditProfileActivity
 import android.app.Activity
+import android.view.animation.AnimationUtils
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
 import com.example.solvr.ui.auth.ChangePasswordActivity
@@ -29,6 +31,21 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
+
+        val animTop = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_top)
+        val animBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
+        val animLeft = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_out_left)
+        val animRight = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_right)
+        val animFadeIn = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        val animFadeOut = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_out)
+
+        view.findViewById<FrameLayout>(R.id.headerContainer).startAnimation(animBottom)
+        view.findViewById<ImageView>(R.id.profile_image).startAnimation(animBottom)
+        view.findViewById<TextView>(R.id.profile_name).startAnimation(animBottom)
+//        view.findViewById<TextView>(R.id.btnEditProfile).startAnimation(animFadeIn)
+//        view.findViewById<TextView>(R.id.btnHistory).startAnimation(animFadeIn)
+//        view.findViewById<TextView>(R.id.btnLogout).startAnimation(animBottom)
+//        view.findViewById<TextView>(R.id.btnChangePassword).startAnimation(animBottom)
 
         val nameTextView = view.findViewById<TextView>(R.id.profile_name)
         val btnEditProfile = view.findViewById<TextView>(R.id.btnEditProfile)

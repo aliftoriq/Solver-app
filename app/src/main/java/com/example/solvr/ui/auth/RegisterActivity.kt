@@ -121,7 +121,7 @@ class RegisterActivity : AppCompatActivity() {
     private fun handleRegistrationSuccess(response: ResponseTemplate?) {
         Toast.makeText(
             this,
-            "Registrasi berhasil! Silakan login",
+            "Registrasi berhasil! Silakan cek email untuk verifikasi",
             Toast.LENGTH_SHORT
         ).show()
 

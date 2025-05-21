@@ -2,13 +2,12 @@ package com.example.solvr.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.solvr.MainActivity
 import com.example.solvr.R
 import com.example.solvr.utils.SessionManager
@@ -24,6 +23,9 @@ class SetPasswordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_set_password)
+
+        val animBottom = AnimationUtils.loadAnimation(this, R.anim.slide_in_bottom)
+        findViewById<FrameLayout>(R.id.headerContainer).startAnimation(animBottom)
 
         edtPassword = findViewById(R.id.edtPassword)
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword)
@@ -57,5 +59,24 @@ class SetPasswordActivity : AppCompatActivity() {
                 Toast.makeText(this, "Gagal menyimpan password", Toast.LENGTH_SHORT).show()
             }
         }
+
+        viewModel.errorMessage.observe(this) { errorMsg ->
+            Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show()
+        }
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        // Reset session
+        val sessionManager = SessionManager(this)
+        sessionManager.clearSession()
+
+        // Kembali ke LoginActivity
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
+
 }

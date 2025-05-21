@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.example.solvr.R
 import android.content.Context
+import android.view.Gravity
 import android.widget.LinearLayout
 
 class SwitchAllertCustom(private val context: Context) {
@@ -22,10 +23,14 @@ class SwitchAllertCustom(private val context: Context) {
             .create()
 
         dialog.show()
+
         dialog.window?.setLayout(
             (context.resources.displayMetrics.widthPixels * 0.85).toInt(),
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
+        dialog.window?.setGravity(Gravity.CENTER)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window?.attributes?.windowAnimations = R.anim.slide_in_bottom
 
         val messageTextView = dialogView.findViewById<TextView>(R.id.messageTextView)
         val yesButton = dialogView.findViewById<Button>(R.id.positiveButton)
@@ -42,8 +47,6 @@ class SwitchAllertCustom(private val context: Context) {
             onNo()
             dialog.dismiss()
         }
-
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.show()
     }
 }
+

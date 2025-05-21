@@ -10,7 +10,7 @@ class AuthDTO {
         val token: String
     )
 
-    data class SetPasswordRequest(val newPassword: String)
+    data class SetPasswordRequest(val password: String)
 
     data class ChangePasswordRequest(
         val oldPassword: String,
@@ -38,7 +38,8 @@ class AuthDTO {
         val username: String,
         val role: String,
         val status: String?,
-        val deleted: Boolean
+        val deleted: Boolean,
+        val verified: Boolean
     )
 
     data class RegisterRequest(

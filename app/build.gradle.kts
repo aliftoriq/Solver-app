@@ -71,5 +71,9 @@ dependencies {
     implementation(libs.shimmer)
     implementation(libs.google.gms.auth)
     implementation(libs.google.gms.location)
+    implementation(libs.viewpager2)
+    implementation(libs.core.ktx)
+    implementation(libs.lottie)
+
 //    implementation(libs.play.services.location)
 }

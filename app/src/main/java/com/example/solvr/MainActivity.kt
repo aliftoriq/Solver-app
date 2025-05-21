@@ -13,11 +13,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.example.solvr.network.FirebaseService
+import com.example.solvr.ui.auth.SetPasswordActivity
 import com.example.solvr.ui.home.HomeFragment
 import com.example.solvr.ui.pengajuan.PengajuanFragment
 import com.example.solvr.ui.plafond.PlafondFragment
 import com.example.solvr.ui.user.UserActivity
+import com.example.solvr.utils.SessionManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
@@ -26,6 +29,60 @@ import com.yourapp.ui.profile.ProfileFragment
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bottomNav: BottomNavigationView
+    private lateinit var viewPager: ViewPager2
+
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContentView(R.layout.activity_main)
+//        ApiClient.init(applicationContext)
+//        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+//
+//        requestpermissionNotification()
+//        getFCMToken()
+//
+//        val sessionManager = SessionManager(this)
+//        if (sessionManager.getAuthToken() == null) {
+//            sessionManager.saveIsPasswordSet(true)
+//        }
+//        val isPasswordSet = sessionManager.isPasswordSet()
+//        if (!isPasswordSet) {
+//            startActivity(Intent(this, SetPasswordActivity::class.java))
+//            finish()
+//            return
+//        }
+//
+//        viewPager = findViewById(R.id.view_pager)
+//        bottomNav = findViewById(R.id.bottom_nav)
+//
+//        viewPager.adapter = MainPagerAdapter(this)
+//        viewPager.isUserInputEnabled = true
+//
+//        // BottomNav -> ViewPager
+//        bottomNav.setOnItemSelectedListener {
+//            viewPager.currentItem = when (it.itemId) {
+//                R.id.nav_home -> 0
+//                R.id.nav_pengajuan -> 1
+//                R.id.nav_plafon -> 3
+//                R.id.nav_profile -> 4
+//                else -> 0
+//            }
+//            true
+//        }
+//
+//
+//        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+//            override fun onPageSelected(position: Int) {
+//                when (position) {
+//                    0 -> bottomNav.selectedItemId = R.id.nav_home
+//                    1 -> bottomNav.selectedItemId = R.id.nav_pengajuan
+//                    3 -> bottomNav.selectedItemId = R.id.nav_plafon
+//                    4 -> bottomNav.selectedItemId = R.id.nav_profile
+//                }
+//            }
+//        })
+//
+//    }
+
 
     private fun getFCMToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
@@ -42,13 +99,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ApiClient.init(applicationContext)
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
 
         // Set default fragment
         replaceFragment(HomeFragment())
         requestpermissionNotification()
 
         getFCMToken()
+
+        val sessionManager = SessionManager(this)
+
+        if(sessionManager.getAuthToken() == null){
+            sessionManager.saveIsPasswordSet(true)
+        }
+        val isPasswordSet = sessionManager.isPasswordSet()
+        if (!isPasswordSet) {
+            val intent = Intent(this, SetPasswordActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
 
         bottomNav = findViewById(R.id.bottom_nav)
 
@@ -77,9 +147,9 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
-
+        
     }
+
 
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

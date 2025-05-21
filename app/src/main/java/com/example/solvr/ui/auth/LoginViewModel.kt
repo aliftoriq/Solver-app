@@ -1,6 +1,5 @@
 package com.example.solvr.ui.auth
 
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,8 +7,6 @@ import com.example.solvr.models.AuthDTO
 import com.example.solvr.models.AuthDTO.LoginRequest
 import com.example.solvr.models.AuthDTO.LoginResponse
 import com.example.solvr.repository.AuthRepository
-import com.example.solvr.utils.SessionManager
-import com.google.android.gms.common.internal.Objects
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,8 +21,8 @@ class LoginViewModel : ViewModel() {
     private val _loginFirebaseResult = MutableLiveData<LoginResponse?>()
     val loginFirebaseResult: LiveData<LoginResponse?> = _loginFirebaseResult
 
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> = _error
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> = _errorMessage
 
     private val _fcmTokenResult = MutableLiveData<Boolean>()
     val fcmTokenResult: LiveData<Boolean> = _fcmTokenResult
@@ -54,20 +51,20 @@ class LoginViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     _loginResult.postValue(response.body())
                 } else {
-                    _error.postValue("Login gagal: ${response.message()}")
+                    _errorMessage.postValue("Login gagal: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                _error.postValue("Error: ${t.message}")
+                _errorMessage.postValue("Error: ${t.message}")
             }
         })
     }
 
-    fun loginFirebase(token: String){
+    fun loginFirebase(token: String) {
         val request = AuthDTO.LoginFirebaseRequest(token)
 
-        ApiClient.authService.loginFirebase(request).enqueue(object : Callback<LoginResponse>{
+        ApiClient.authService.loginFirebase(request).enqueue(object : Callback<LoginResponse> {
             override fun onResponse(
                 call: Call<LoginResponse>,
                 response: Response<LoginResponse>
@@ -75,12 +72,12 @@ class LoginViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     _loginFirebaseResult.postValue(response.body())
                 } else {
-                    _error.postValue("Login gagal: ${response.message()}")
+                    _errorMessage.postValue("Login gagal: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse?>, t: Throwable) {
-                _error.postValue("Error: ${t.message}")
+                _errorMessage.postValue("Error: ${t.message}")
             }
         })
     }
@@ -90,11 +87,21 @@ class LoginViewModel : ViewModel() {
 
         ApiClient.authService.setPassword(request).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                _setPasswordResult.postValue(response.isSuccessful)
+                if (response.isSuccessful) {
+                    _setPasswordResult.postValue(response.isSuccessful)
+                }
+                else{
+                    val message = when (response.code()) {
+                        400 -> "Bad request"
+                        else -> "Registrasi gagal (Error ${response.code()})"
+                    }
+                    _errorMessage.value = message
+                }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 _setPasswordResult.postValue(false)
+                _errorMessage.postValue("Error: ${t.message}")
             }
         })
     }

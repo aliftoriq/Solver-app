@@ -50,9 +50,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="12dp"
+                    android:visibility="visible"
                     app:cardCornerRadius="24dp"
-                    app:cardElevation="4dp"
-                    android:visibility="visible">
+                    app:cardElevation="4dp">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -108,8 +108,8 @@
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginBottom="15dp"
-                                    android:layout_marginTop="8dp">
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="15dp">
 
                                     <View
                                         android:layout_width="160dp"
@@ -137,9 +137,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="12dp"
+                    android:visibility="invisible"
                     app:cardCornerRadius="24dp"
-                    app:cardElevation="4dp"
-                    android:visibility="invisible">
+                    app:cardElevation="4dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -228,6 +228,7 @@
 
             </FrameLayout>
 
+            <!--    -->
             <FrameLayout
                 android:id="@+id/headerContainer"
                 android:layout_width="match_parent"
@@ -273,8 +274,6 @@
             </FrameLayout>
 
             <!-- Simulation Section -->
-
-            <!-- Bottom Navigation -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -283,11 +282,142 @@
                 android:orientation="vertical"
                 android:padding="15dp">
 
+
+
+
+
+                <FrameLayout
+                    android:id="@+id/activeLoanApplicationContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="40dp">
+
+                    <!-- Badge -->
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_gradient_vertical_rd5"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:layout_marginVertical="10dp"
+                        android:text="Sedang di ajukan"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold" />
+
+                    <!-- Card -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_gravity="bottom"
+                        android:layout_marginTop="60dp"
+                        android:background="@drawable/bg_gradient_vertical_rd5"
+                        android:orientation="vertical">
+
+                        <!-- Header Abu-Abu -->
+                        <LinearLayout
+                            android:id="@+id/cardHeader"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:background="@drawable/bg_grey_rd_top_5"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="16dp">
+
+                            <TextView
+                                android:id="@+id/tvReviewStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="On Review"
+                                android:textColor="#FFFFFF"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <View
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/tvTanggal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20 Mei 2024"
+                                android:textColor="#FFFFFF"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="16dp" />
+
+                        <!-- Info Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="16dp"
+                            android:weightSum="2">
+
+                            <!-- Jumlah Pinjaman -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvJudulJumlahPinjaman"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Jumlah Pinjaman"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/tvJumlahPinjaman"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="IDR 4.999.000,-"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+
+                            <!-- Cicilan Per Bulan -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvIDJudulCicilan"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Cicilan Per Bulan"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="12sp" />
+
+                                <TextView
+                                    android:id="@+id/tvCicilan"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="IDR 499.000,-"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </FrameLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Simulasikan"
-                    android:textColor="@color/secondary"
+                    android:text="Ajukan"
+                    android:textColor="@color/primary"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
