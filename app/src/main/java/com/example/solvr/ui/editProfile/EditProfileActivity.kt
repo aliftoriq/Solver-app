@@ -122,6 +122,8 @@ class EditProfileActivity : AppCompatActivity() {
         setupListeners()
         setupObservers()
 
+        showLoading(true)
+
         viewModel.fetchUserDetail()
     }
 
@@ -201,8 +203,13 @@ class EditProfileActivity : AppCompatActivity() {
     private fun setupObservers() {
         val sessionManager = SessionManager(this)
 
+        viewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
+
         // Observe user detail data
         viewModel.userDetail.observe(this) { user ->
+            showLoading(false)
             if (user == null) {
                 isUserExist = false
                 if (!etName.isEnabled) etName.setText(sessionManager.getUserName())
@@ -240,8 +247,8 @@ class EditProfileActivity : AppCompatActivity() {
                 setFormEnabled(true)
                 isUserExist = false
                 btnEdit.visibility = View.GONE
-                showEmptyState(true)
                 showLoading(false)
+                showEmptyState(true)
                 Toast.makeText(this, message ?: "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
             }
         }

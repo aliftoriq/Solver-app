@@ -269,7 +269,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_plaffon" />
+                        android:src="@drawable/ic_arrow_rigth" />
                 </LinearLayout>
             </FrameLayout>
 
@@ -533,186 +533,186 @@
                     android:layout_marginTop="24dp"
                     android:background="@android:color/darker_gray" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_gradient_vertical_rd5"
-                    android:orientation="vertical">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@drawable/bg_gradient_vertical_rd5"-->
+<!--                    android:orientation="vertical">-->
 
-                    <!-- Calculation Results -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="16dp">
+<!--                    &lt;!&ndash; Calculation Results &ndash;&gt;-->
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="16dp"-->
+<!--                        android:orientation="horizontal"-->
+<!--                        android:paddingHorizontal="16dp">-->
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:gravity="center"-->
+<!--                            android:orientation="vertical">-->
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_cicilan" />
+<!--                            <ImageView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:src="@drawable/ic_cicilan" />-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:gravity="center"
-                                android:text="Cicilan"
-                                android:textColor="@android:color/white" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginTop="8dp"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="Cicilan"-->
+<!--                                android:textColor="@android:color/white" />-->
 
-                            <TextView
-                                android:id="@+id/txtCicilanBulanan"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="IDR - ,-"
-                                android:textColor="@android:color/white"
-                                android:textSize="10dp" />
-                        </LinearLayout>
+<!--                            <TextView-->
+<!--                                android:id="@+id/txtCicilanBulanan"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="IDR - ,-"-->
+<!--                                android:textColor="@android:color/white"-->
+<!--                                android:textSize="10dp" />-->
+<!--                        </LinearLayout>-->
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:gravity="center"-->
+<!--                            android:orientation="vertical">-->
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_wallet" />
+<!--                            <ImageView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:src="@drawable/ic_wallet" />-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:gravity="center"
-                                android:text="Total"
-                                android:textColor="@android:color/white" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginTop="8dp"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="Total"-->
+<!--                                android:textColor="@android:color/white" />-->
 
-                            <TextView
-                                android:id="@+id/txtTotalPembayaran"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="IDR - ,-"
-                                android:textColor="@android:color/white"
-                                android:textSize="10dp" />
-                        </LinearLayout>
+<!--                            <TextView-->
+<!--                                android:id="@+id/txtTotalPembayaran"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="IDR - ,-"-->
+<!--                                android:textColor="@android:color/white"-->
+<!--                                android:textSize="10dp" />-->
+<!--                        </LinearLayout>-->
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:gravity="center"-->
+<!--                            android:orientation="vertical">-->
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_rate" />
+<!--                            <ImageView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:src="@drawable/ic_rate" />-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:gravity="center"
-                                android:text="Bunga"
-                                android:textColor="@android:color/white" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginTop="8dp"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="Bunga"-->
+<!--                                android:textColor="@android:color/white" />-->
 
-                            <TextView
-                                android:id="@+id/txtBiayaBunga"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="IDR - ,-"
-                                android:textColor="@android:color/white"
-                                android:textSize="10dp" />
-                        </LinearLayout>
+<!--                            <TextView-->
+<!--                                android:id="@+id/txtBiayaBunga"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="IDR - ,-"-->
+<!--                                android:textColor="@android:color/white"-->
+<!--                                android:textSize="10dp" />-->
+<!--                        </LinearLayout>-->
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:gravity="center"-->
+<!--                            android:orientation="vertical">-->
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_admin" />
+<!--                            <ImageView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:src="@drawable/ic_admin" />-->
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:gravity="center"
-                                android:text="Admin"
-                                android:textColor="@android:color/white" />
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginTop="8dp"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="Admin"-->
+<!--                                android:textColor="@android:color/white" />-->
 
-                            <TextView
-                                android:id="@+id/txtBiayaAdmin"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="IDR - ,-"
-                                android:textColor="@android:color/white"
-                                android:textSize="10dp" />
-                        </LinearLayout>
+<!--                            <TextView-->
+<!--                                android:id="@+id/txtBiayaAdmin"-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:gravity="center"-->
+<!--                                android:text="IDR - ,-"-->
+<!--                                android:textColor="@android:color/white"-->
+<!--                                android:textSize="10dp" />-->
+<!--                        </LinearLayout>-->
 
 
-                    </LinearLayout>
-                    <!--  List Rate etc-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
+<!--                    </LinearLayout>-->
+<!--                    &lt;!&ndash;  List Rate etc&ndash;&gt;-->
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="bottom"-->
+<!--                        android:layout_marginHorizontal="20dp"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:orientation="horizontal">-->
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_bold"
-                            android:gravity="left"
-                            android:text="Rate -%"
-                            android:textColor="@android:color/white"
-                            android:textSize="12dp" />
+<!--                        <TextView-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:fontFamily="@font/poppins_bold"-->
+<!--                            android:gravity="left"-->
+<!--                            android:text="Rate -%"-->
+<!--                            android:textColor="@android:color/white"-->
+<!--                            android:textSize="12dp" />-->
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_bold"
-                            android:gravity="center"
-                            android:text="Rate -%"
-                            android:textColor="@android:color/white"
-                            android:textSize="12dp" />
+<!--                        <TextView-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:fontFamily="@font/poppins_bold"-->
+<!--                            android:gravity="center"-->
+<!--                            android:text="Rate -%"-->
+<!--                            android:textColor="@android:color/white"-->
+<!--                            android:textSize="12dp" />-->
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/poppins_bold"
-                            android:gravity="right"
-                            android:text="Rate -%"
-                            android:textColor="@android:color/white"
-                            android:textSize="12dp" />
-                    </LinearLayout>
-                </LinearLayout>
-                <!-- batas card hasil kalkulasi-->
+<!--                        <TextView-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:layout_weight="1"-->
+<!--                            android:fontFamily="@font/poppins_bold"-->
+<!--                            android:gravity="right"-->
+<!--                            android:text="Rate -%"-->
+<!--                            android:textColor="@android:color/white"-->
+<!--                            android:textSize="12dp" />-->
+<!--                    </LinearLayout>-->
+<!--                </LinearLayout>-->
+<!--                &lt;!&ndash; batas card hasil kalkulasi&ndash;&gt;-->
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

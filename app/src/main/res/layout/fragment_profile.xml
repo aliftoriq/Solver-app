@@ -3,13 +3,14 @@
     android:id="@+id/profile_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:layout_marginTop="50dp">
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:background="@color/white"
+        android:paddingTop="50dp"
         android:orientation="vertical">
 
         <!-- Profile Image with Circular Shape -->
@@ -76,7 +77,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_plaffon"
+                    android:src="@drawable/ic_arrow_rigth"
                     app:tint="@color/white" />
             </LinearLayout>
         </FrameLayout>
@@ -88,36 +89,271 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-40dp"
-            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_white_rounded"
-
             android:clipToPadding="false"
-            android:divider="?android:attr/dividerVertical"
-            android:elevation="2dp"
+            android:paddingHorizontal="20dp"
             android:orientation="vertical"
-            android:padding="8dp"
+            android:paddingVertical="20dp"
             android:showDividers="middle">
 
-            <TextView
+            <LinearLayout
                 android:id="@+id/btnEditProfile"
-                style="@style/ProfileOptionStyle"
-                android:text="Edit Profile" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:background="@drawable/bg_rounded_border_blue"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_profile_user_detail"/>
+
+                <!-- Text Section -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Detail pengguna"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kelola data diri anda"
+                        android:textColor="#888888"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_profile_arrow"/>
+            </LinearLayout>
+
+
+
+<!--            -->
+
+
+            <LinearLayout
+                android:id="@+id/btnChangePassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:background="@drawable/bg_rounded_border_blue"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_profile_password"/>
+
+                <!-- Text Section -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ganti Password"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Perbarui password anda"
+                        android:textColor="#888888"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_profile_arrow"/>
+            </LinearLayout>
+
+
+
+<!--            -->
+
+
+            <LinearLayout
+                android:id="@+id/btnFaq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:background="@drawable/bg_rounded_border_blue"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_profile_faq"/>
+
+                <!-- Text Section -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/bantuan_saran"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cari solusimu disini"
+                        android:textColor="#888888"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_profile_arrow"/>
+            </LinearLayout>
+
+
+
+<!--            -->
+
+
+
+            <LinearLayout
+                android:id="@+id/btnPlafon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:background="@drawable/bg_rounded_border_blue"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_profile_plafon"/>
+
+                <!-- Text Section -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Plafon"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lihat Detail Plafon"
+                        android:textColor="#888888"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_profile_arrow"/>
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/btnHistory"
                 style="@style/ProfileOptionStyle"
                 android:text="History" />
 
-            <TextView
-                android:id="@+id/btnChangePassword"
-                style="@style/ProfileOptionStyle"
-                android:text="Change Password" />
 
-            <TextView
+            <LinearLayout
                 android:id="@+id/btnLogout"
-                style="@style/ProfileOptionStyle"
-                android:text="Logout"
-                android:textColor="#EF4444" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="6dp"
+                android:background="@drawable/bg_danger_rounded_15"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_profile_logout"/>
+
+
+                <TextView
+                    style="@style/ProfileOptionStyle"
+                    android:text="Logout"
+                    android:gravity="center"
+                    android:layout_marginEnd="48dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="6dp"
+                android:backgroundTint="@color/primary"
+                android:background="@drawable/bg_danger_rounded_15"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_profile_logout"/>
+
+
+                <TextView
+                    style="@style/ProfileOptionStyle"
+                    android:text="Login"
+                    android:gravity="center"
+                    android:layout_marginEnd="48dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

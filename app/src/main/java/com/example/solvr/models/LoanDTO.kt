@@ -8,8 +8,19 @@ class LoanDTO {
         val latitude: Double
     )
 
+    data class RequestCalculate (
+        val loanAmount: Double,
+        val loanTenor: Int,
+    )
+
     data class Response(
         val data: List<DataItem?>? = null,
+        val message: String? = null,
+        val status: Int? = null
+    )
+
+    data class ResponseCalculate(
+        val data: Data? = null,
         val message: String? = null,
         val status: Int? = null
     )
@@ -71,15 +82,28 @@ class LoanDTO {
         val latitude: Any? = null,
         val reviewedAt: Any? = null,
         val approvedAt: Any? = null,
-        val loanAmount: Any? = null,
+        val loanAmount: Double? = null,
         val userCustomer: UserCustomer? = null,
         val loanTenor: Int? = null,
         val loanApplicationToEmployees: List<LoanApplicationToEmployeesItem?>? = null,
-        val monthlyPayment: Any? = null,
+        val monthlyPayment: Double? = null,
         val requestedAt: String? = null,
         val id: String? = null,
         val status: String? = null,
         val disbursedAt: Any? = null,
         val longitude: Any? = null
+    )
+
+    data class Data(
+        val monthlyPayment: Double?,
+        val totalInterest: Double?,
+        val totalPayment: Double?,
+        val adminFee: Double?,
+        val rate: Double?,
+        val amount: Double?,
+        val amountDisbursed: Double?,
+        val tenor: Int?,
+        val accountNumber: String?,
+        val address: String?
     )
 }

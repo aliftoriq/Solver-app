@@ -1,5 +1,6 @@
 package com.yourapp.ui.profile
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,15 +11,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.solvr.R
 import com.example.solvr.ui.auth.LoginActivity
-import com.example.solvr.ui.history.HistoryActivity
+import com.example.solvr.ui.history.HistoryFragment
 import com.example.solvr.ui.profile.EditProfileActivity
 import android.app.Activity
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.example.solvr.ui.auth.ChangePasswordActivity
+import com.example.solvr.ui.plafond.PlafondFragment
 import com.example.solvr.utils.FileUtil
+import com.example.yourapp.utils.SwitchAllertCustom
 
 class ProfileFragment : Fragment() {
 
@@ -48,21 +52,31 @@ class ProfileFragment : Fragment() {
 //        view.findViewById<TextView>(R.id.btnChangePassword).startAnimation(animBottom)
 
         val nameTextView = view.findViewById<TextView>(R.id.profile_name)
-        val btnEditProfile = view.findViewById<TextView>(R.id.btnEditProfile)
+        val btnEditProfile = view.findViewById<LinearLayout>(R.id.btnEditProfile)
         val btnHistory = view.findViewById<TextView>(R.id.btnHistory)
-        val btnLogout = view.findViewById<TextView>(R.id.btnLogout)
-        val btnChangePassword = view.findViewById<TextView>(R.id.btnChangePassword)
+        val btnFaq = view.findViewById<LinearLayout>(R.id.btnFaq)
+        val btnPlafon = view.findViewById<LinearLayout>(R.id.btnPlafon)
+        val btnLogout = view.findViewById<LinearLayout>(R.id.btnLogout)
+        val btnChangePassword = view.findViewById<LinearLayout>(R.id.btnChangePassword)
+        val btnLogin = view.findViewById<LinearLayout>(R.id.btnLogin)
 
         profileViewModel.isUserLoggedIn.observe(viewLifecycleOwner) { isLoggedIn ->
             if (!isLoggedIn) {
-                val intent = Intent(requireContext(), LoginActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+
+                btnEditProfile.visibility = View.GONE
+                btnHistory.visibility = View.GONE
+                btnFaq.visibility = View.GONE
+                btnPlafon.visibility = View.GONE
+                btnLogout.visibility = View.GONE
+                btnChangePassword.visibility = View.GONE
+
+
             }
         }
 
         profileViewModel.userName.observe(viewLifecycleOwner) { userName ->
             nameTextView.text = userName
+            btnLogin.visibility = View.GONE
         }
 
         profileViewModel.uploadResult.observe(viewLifecycleOwner) { success ->
@@ -76,7 +90,19 @@ class ProfileFragment : Fragment() {
         }
 
         btnLogout.setOnClickListener {
-            profileViewModel.logout()
+            val switchAlert = SwitchAllertCustom(requireContext())
+            switchAlert.show(
+                message = "Apakah Anda yakin untuk logout?",
+                onYes = {
+                    profileViewModel.logout()
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                },
+                onNo = {
+                }
+            )
+
         }
 
         btnEditProfile.setOnClickListener {
@@ -84,7 +110,21 @@ class ProfileFragment : Fragment() {
         }
 
         btnHistory.setOnClickListener {
-            startActivity(Intent(requireContext(), HistoryActivity::class.java))
+            startActivity(Intent(requireContext(), HistoryFragment::class.java))
+        }
+
+        btnPlafon.setOnClickListener {
+            startActivity(Intent(requireContext(), PlafondFragment::class.java))
+        }
+
+        btnFaq.setOnClickListener {
+
+        }
+
+        btnLogin.setOnClickListener {
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
 
         btnChangePassword.setOnClickListener {

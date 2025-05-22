@@ -11,8 +11,7 @@
         android:title="Pengajuan" />
 
     <item
-        android:id="@+id/nav_dummy"
-        android:enabled="false"
+        android:id="@+id/nav_history"
         android:title=""
         android:checkable="false" />
 

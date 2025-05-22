@@ -1,49 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_gradient_vertical_rd5"
-    android:radius="8dp"
-    android:elevation="4dp"
-    android:layout_marginBottom="16dp"
-    android:clipToPadding="false">
+    android:padding="16dp"
+    android:layout_marginBottom="10dp"
+    android:elevation="5dp"
+    android:radius="12dp">
 
-    <TextView
-        android:id="@+id/tvLoanStatus"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Status"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:layout_marginBottom="8dp"/>
+        android:background="@drawable/bg_gradient_vertical_rd5"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvLoanAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Jumlah Pinjaman"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        android:layout_marginBottom="8dp"/>
+        <!-- Header Abu-Abu -->
+        <LinearLayout
+            android:id="@+id/cardHeader"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_secondary_rd_top_5"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp">
 
-    <TextView
-        android:id="@+id/tvRequestedDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tanggal Pengajuan"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        android:layout_marginBottom="8dp"/>
+            <TextView
+                android:id="@+id/tvReviewStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="On Review"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvTenor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tenor"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        android:layout_marginBottom="8dp"/>
-</LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tvTanggal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20 Mei 2024"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <!-- Info Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:weightSum="2">
+
+            <!-- Jumlah Pinjaman -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvJudulJumlahPinjaman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jumlah Pinjaman"
+                    android:textColor="#FFFFFF"
+                    android:textSize="8sp" />
+
+                <TextView
+                    android:id="@+id/tvJumlahPinjaman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IDR 4.999.000,-"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Cicilan Per Bulan -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvIDJudulCicilan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cicilan Per Bulan"
+                    android:textColor="#FFFFFF"
+                    android:textSize="8sp" />
+
+                <TextView
+                    android:id="@+id/tvCicilan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="IDR 499.000,-"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Footer -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="bottom|center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="12dp">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="26dp"
+                android:layout_marginEnd="4dp"
+                android:contentDescription="Logo Solvr"
+                android:src="@drawable/solvr_landscape_white" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Tenor : "
+                android:textColor="#FFFFFF"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tvTenor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="9 Bulan"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

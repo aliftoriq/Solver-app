@@ -8,14 +8,14 @@ class LoanSummaryDTO {
     )
 
     data class Data(
-        val remainingPlafon: Any? = null,
-        val monthlyPayment: Any? = null,
+        val remainingPlafon: Double? = null,
+        val monthlyPayment: Double? = null,
         val name: String? = null,
         val activeLoans: List<ActiveLoansItem?>? = null,
         val activeLoanApplication: ActiveLoansItem?? = null,
         val accountNumber: String? = null,
         val plafonPackage: PlafonPackage? = null,
-        val remainingLoan: Any? = null
+        val remainingLoan: Double? = null
     )
 
     data class PlafonPackage(

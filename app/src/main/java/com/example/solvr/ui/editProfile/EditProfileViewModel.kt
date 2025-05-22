@@ -40,6 +40,9 @@ class EditProfileViewModel : ViewModel() {
     private val _uploadResult = MutableLiveData<Boolean>()
     val uploadResult: LiveData<Boolean> get() = _uploadResult
 
+    private val _isLoadingg = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoadingg
+
     fun fetchUserDetail() {
         userRepository.getUSerDetail().enqueue(object : Callback<UserDTO.Response> {
             override fun onResponse(
@@ -131,6 +134,7 @@ class EditProfileViewModel : ViewModel() {
         ApiClient.userService.uploadKtpImage(body).enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
+                        _isLoadingg.postValue(false)
                         _uploadResult.postValue(true)
                     } else {
                         _errorMessage.postValue("Gagal upload: ${response.code()}")

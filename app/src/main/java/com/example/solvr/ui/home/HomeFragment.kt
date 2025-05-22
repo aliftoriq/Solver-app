@@ -2,6 +2,8 @@ package com.example.solvr.ui.home
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +17,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.solvr.R
+import com.example.solvr.ui.pengajuan.PengajuanViewModel
 import com.example.solvr.utils.SessionManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -29,11 +33,21 @@ class HomeFragment : Fragment() {
     private var selectedTenor = 0
     private var selectedAmount = 0
 
+    private lateinit var viewModel: PengajuanViewModel
+
+    private lateinit var tvTitlePackage: TextView
+    private lateinit var tvLevel: TextView
+    private lateinit var tvRate: TextView
+    private lateinit var tvNominal: TextView
+    private lateinit var bgCard: RelativeLayout
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+        viewModel = ViewModelProvider(this)[PengajuanViewModel::class.java]
 
         val animTop = AnimationUtils.loadAnimation(inflater.context, R.anim.slide_in_top)
         val animBottom = AnimationUtils.loadAnimation(inflater.context, R.anim.slide_in_bottom)
@@ -42,21 +56,16 @@ class HomeFragment : Fragment() {
         val animFadeIn = AnimationUtils.loadAnimation(inflater.context, R.anim.fade_in)
         val animFadeOut = AnimationUtils.loadAnimation(inflater.context, R.anim.fade_out)
 
-// Terapkan animasi ke masing-masing view
-//        view.findViewById<TextView>(R.id.greetingText).startAnimation(animLeft)
-        view.findViewById<RelativeLayout>(R.id.cardContainer).startAnimation(animFadeIn)
-        view.findViewById<FrameLayout>(R.id.headerContainer).startAnimation(animBottom)
-//        view.findViewById<SeekBar>(R.id.seekLoanAmount).startAnimation(animLeft)
-//        view.findViewById<MaterialButtonToggleGroup>(R.id.tenorToggleGroup).startAnimation(animBottom)
-
-
-
         val sessionManager = SessionManager(requireContext())
         val greetingText: TextView = view.findViewById(R.id.greetingText)
         val userName = sessionManager.getUserName()
 
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
+
+        // Set up SeekBar for Loan Amount
+        val seekLoanAmount = view.findViewById<SeekBar>(R.id.seekLoanAmount)
+        val edtLoanAmount = view.findViewById<TextInputEditText>(R.id.edtLoanAmount)
 
         val greeting = when (hour) {
             in 4..10 -> "Selamat Pagi"
@@ -65,17 +74,69 @@ class HomeFragment : Fragment() {
             else -> "Selamat Malam"
         }
 
+        var bungaPerBulan = 0.015
+        val biayaAdmin = 50_000.0
+
+        tvTitlePackage = view.findViewById(R.id.title_package)
+        tvLevel = view.findViewById(R.id.level_text)
+        tvRate = view.findViewById(R.id.rate_tenor)
+        tvNominal = view.findViewById(R.id.nominal)
+        bgCard = view.findViewById(R.id.bg_card)
+
+// Terapkan animasi ke masing-masing view
+//        view.findViewById<TextView>(R.id.greetingText).startAnimation(animLeft)
+        view.findViewById<RelativeLayout>(R.id.bg_card).startAnimation(animFadeIn)
+        view.findViewById<FrameLayout>(R.id.headerContainer).startAnimation(animBottom)
+//        view.findViewById<SeekBar>(R.id.seekLoanAmount).startAnimation(animLeft)
+//        view.findViewById<MaterialButtonToggleGroup>(R.id.tenorToggleGroup).startAnimation(animBottom)
+
+
+//        <<- Section loan summary ->>
+        viewModel.fetchLoanSummary()
+
+        viewModel.loanSummary.observe(viewLifecycleOwner) { summary ->
+            summary?.let {
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    tvTitlePackage.text = it.data?.plafonPackage?.name
+                    tvLevel.text = "Level : ${it.data?.plafonPackage?.level}"
+                    tvRate.text =
+                        "Rate ${it.data?.plafonPackage?.interestRate} - Tenor ${it.data?.plafonPackage?.maxTenorMonths}"
+                    tvNominal.text = "Rp. ${it.data?.plafonPackage?.amount}"
+
+                    seekLoanAmount.max = (it.data?.remainingPlafon?.toInt() ?: 10_000_000) / 100_000
+                    bungaPerBulan = (it.data?.plafonPackage?.interestRate ?: 0.015) as Double
+
+
+                    val plafon = it.data?.plafonPackage
+                    if (plafon?.level == 1) {
+                        bgCard.setBackgroundResource(R.drawable.card_bronze)
+                    } else if (plafon?.level == 2) {
+                        bgCard.setBackgroundResource(R.drawable.card_silver)
+                    } else if (plafon?.level == 3) {
+                        bgCard.setBackgroundResource(R.drawable.card_gold)
+                    } else if (plafon?.level == 4) {
+                        bgCard.setBackgroundResource(R.drawable.card_platinum)
+                    } else if (plafon?.level == 5) {
+                        bgCard.setBackgroundResource(R.drawable.card_diamond)
+                    } else {
+                        bgCard.setBackgroundResource(R.drawable.card)
+                    }
+                    bgCard.startAnimation(animRight)
+                }, 1000)
+
+            }
+        }
+
+
+
         greetingText.text = if (userName.isNullOrEmpty()) {
             "$greeting,\nSolvr-gengs!"
         } else {
             "$greeting,\n$userName!"
         }
 
-        // Set up SeekBar for Loan Amount
-        val seekLoanAmount = view.findViewById<SeekBar>(R.id.seekLoanAmount)
-        val edtLoanAmount = view.findViewById<TextInputEditText>(R.id.edtLoanAmount)
-
-        seekLoanAmount.max = 100  // Maksimal 10 juta (100 * 100k)
+        seekLoanAmount.max = 100
         seekLoanAmount.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 selectedAmount = progress * 100_000
@@ -101,12 +162,22 @@ class HomeFragment : Fragment() {
                 allTenorButtons.forEach { button ->
                     if (button.id == checkedId) {
                         // Change selected button to primary color
-                        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.secondary))
+                        button.setBackgroundColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.secondary
+                            )
+                        )
                         button.setTextColor(Color.WHITE)
                     } else {
                         // Reset unselected buttons to secondary color
-                        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.primary))
-                        button.setTextColor(Color.WHITE )
+                        button.setBackgroundColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.primary
+                            )
+                        )
+                        button.setTextColor(Color.WHITE)
                     }
                 }
 
@@ -126,18 +197,20 @@ class HomeFragment : Fragment() {
         val btnSimulasi = view.findViewById<Button>(R.id.btnCalculate)
         btnSimulasi.setOnClickListener {
             if (selectedAmount == 0 || selectedTenor == 0) {
-                Toast.makeText(requireContext(), "Pilih nominal dan tenor terlebih dahulu.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Pilih nominal dan tenor terlebih dahulu.",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
-
-            val bungaPerBulan = 0.014
-            val biayaAdmin = 50_000.0
 
             val totalBunga = selectedAmount * bungaPerBulan * selectedTenor
             val totalPembayaran = selectedAmount + totalBunga + biayaAdmin
             val cicilanBulanan = totalPembayaran / selectedTenor
 
-            val simulationContainer = view.findViewById<LinearLayout>(R.id.simulationResultContainer)
+            val simulationContainer =
+                view.findViewById<LinearLayout>(R.id.simulationResultContainer)
             val txtCicilan = view.findViewById<TextView>(R.id.txtCicilanBulanan)
             val txtTotal = view.findViewById<TextView>(R.id.txtTotalPembayaran)
             val txtBunga = view.findViewById<TextView>(R.id.txtBiayaBunga)
@@ -161,4 +234,5 @@ class HomeFragment : Fragment() {
 
 
 }
+
 

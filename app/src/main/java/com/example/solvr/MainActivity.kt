@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.solvr.network.FirebaseService
 import com.example.solvr.ui.auth.SetPasswordActivity
+import com.example.solvr.ui.history.HistoryFragment
 import com.example.solvr.ui.home.HomeFragment
 import com.example.solvr.ui.pengajuan.PengajuanFragment
 import com.example.solvr.ui.plafond.PlafondFragment
@@ -131,6 +132,11 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.nav_profile -> {
                     replaceFragment(ProfileFragment())
+                    true
+                }
+
+                R.id.nav_history -> {
+                    replaceFragment(HistoryFragment())
                     true
                 }
 

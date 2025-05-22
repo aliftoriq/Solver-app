@@ -50,6 +50,10 @@ interface UserService {
         @Part file: MultipartBody.Part
     ): Call<Void>
 
+    // Loan Application
+    @Headers("Content-Type: application/json")
+    @POST("loan-application/calculate")
+    fun calculateLoan(@Body loanRequest: LoanDTO.RequestCalculate): Call<LoanDTO.ResponseCalculate>
 
     // Loan Application
     @Headers("Content-Type: application/json")

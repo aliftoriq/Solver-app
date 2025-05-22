@@ -49,12 +49,12 @@
             android:textStyle="bold" />
 
         <RelativeLayout
-            android:id="@+id/cardContainer"
+            android:id="@+id/bg_card"
             android:layout_width="300dp"
             android:layout_height="180dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:background="@drawable/card_bronze"
+            android:background="@drawable/card"
             android:padding="12dp">
 
             <!-- Bronze Package -->
@@ -129,6 +129,85 @@
             android:layout_gravity="center"
             android:layout_marginTop="14dp"
             android:src="@drawable/solusi_tepat" />
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/btnPengajuan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="16dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_menu_pengajuan"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Pengajuan"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnPlafon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_menu_plafon"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="Plafon"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnPinjaman"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_menu_pinjaman"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="pinjaman"
+                    android:textColor="@color/primary"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
 
 <!--        &lt;!&ndash; Simulasi Card &ndash;&gt;-->
@@ -451,7 +530,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_plaffon" />
+                    android:src="@drawable/ic_arrow_rigth" />
             </LinearLayout>
         </FrameLayout>
 

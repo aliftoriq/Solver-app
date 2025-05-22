@@ -11,10 +11,9 @@ import com.example.solvr.models.LoanDTO
 class HistoryAdapter(private var historyList: List<LoanDTO.DataItem>) :
     RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
 
-    // Update history data without recreating the adapter
     fun updateData(newHistoryList: List<LoanDTO.DataItem>) {
         historyList = newHistoryList
-        notifyDataSetChanged() // Notify the RecyclerView that data has changed
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
@@ -30,16 +29,34 @@ class HistoryAdapter(private var historyList: List<LoanDTO.DataItem>) :
     override fun getItemCount(): Int = historyList.size
 
     inner class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val tvStatus: TextView = itemView.findViewById(R.id.tvLoanStatus)
-        private val tvAmount: TextView = itemView.findViewById(R.id.tvLoanAmount)
-        private val tvDate: TextView = itemView.findViewById(R.id.tvRequestedDate)
+        private val tvReviewStatus: TextView = itemView.findViewById(R.id.tvReviewStatus)
+        private val tvTanggal: TextView = itemView.findViewById(R.id.tvTanggal)
+        private val tvJumlahPinjaman: TextView = itemView.findViewById(R.id.tvJumlahPinjaman)
+        private val tvCicilan: TextView = itemView.findViewById(R.id.tvCicilan)
         private val tvTenor: TextView = itemView.findViewById(R.id.tvTenor)
 
         fun bind(item: LoanDTO.DataItem) {
-            tvStatus.text = "Status: ${item.status ?: "-"}"
-            tvAmount.text = "Jumlah: Rp. ${item.loanAmount?.toString() ?: "-"}"
-            tvDate.text = "Tanggal: ${item.requestedAt?.substring(0,10) ?: "-"}"
-            tvTenor.text = "Tenor: ${item.loanTenor ?: 0} bulan"
+            // Set default if null
+            tvReviewStatus.text = when (item.status?.lowercase()) {
+                "approved" -> "Disetujui"
+                "rejected" -> "Ditolak"
+                else -> "On Review"
+            }
+
+            tvTanggal.text = item.requestedAt?.substring(0, 10) ?: "-"
+
+            val formattedAmount = item.loanAmount?.let { formatRupiah(it.toInt()) } ?: "-"
+            tvJumlahPinjaman.text = "IDR $formattedAmount"
+
+            val monthlyInstallment = item.monthlyPayment?.let { formatRupiah(it.toInt()) } ?: "-"
+            tvCicilan.text = "IDR $monthlyInstallment"
+
+            tvTenor.text = "${item.loanTenor ?: 0} Bulan"
+        }
+
+        private fun formatRupiah(amount: Int): String {
+            return String.format("%,d", amount).replace(',', '.')
         }
     }
+
 }

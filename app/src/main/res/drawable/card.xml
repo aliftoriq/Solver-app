@@ -23,9 +23,6 @@
         android:fillColor="#52D5BA"/>
   </group>
   <path
-      android:pathData="M224,147h64v26h-64z"
-      android:fillColor="url(#pattern0_670_9637)"/>
-  <path
       android:pathData="M42,53L263,53A10,10 0,0 1,273 63L273,189A10,10 0,0 1,263 199L42,199A10,10 0,0 1,32 189L32,63A10,10 0,0 1,42 53z"
       android:fillColor="#F7D095"/>
   <path
@@ -44,7 +41,4 @@
         android:pathData="M306,18m-89,0a89,89 0,1 1,178 0a89,89 0,1 1,-178 0"
         android:fillColor="#52D5BA"/>
   </group>
-  <path
-      android:pathData="M224,147h64v26h-64z"
-      android:fillColor="url(#pattern1_670_9637)"/>
 </vector>

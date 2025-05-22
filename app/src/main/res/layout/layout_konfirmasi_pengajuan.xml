@@ -37,7 +37,7 @@
         <!-- Summary Box -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="231dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/bg_gradient_vertical_rd5"
             android:backgroundTintMode="src_in"
@@ -110,7 +110,13 @@
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
                 </LinearLayout>
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="10dp">
                 <!-- Bunga -->
                 <LinearLayout
                     android:layout_width="0dp"
@@ -180,31 +186,34 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/txtRate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="Rate : 5.5%"
+                    android:text="Rate: 1.5%"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/txtPinjaman"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="center"
-                    android:text="Pinjaman : IDR 4.500.000,-"
+                    android:text="Pinjaman: IDR 4.500.000,-"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/txtTenor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="end"
-                    android:text="Tenor : 9"
+                    android:text="Tenor: 9"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
             </LinearLayout>
@@ -229,11 +238,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                android:text="Dana yang di cairkan : "
+                android:text="Dana yang di cairkan: "
                 android:textColor="@color/primary"
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/txtDisbursedAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
@@ -252,11 +262,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins"
-                android:text="Rekening Tujuan : "
+                android:text="Rekening Tujuan: "
                 android:textColor="@color/primary"
                 android:textSize="14sp" />
 
             <TextView
+                android:id="@+id/txtAccountNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
@@ -267,19 +278,31 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/txtAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:fontFamily="@font/poppins"
-            android:text="Alamat Saat Ini : JL Pondok Indah"
+            android:text="Alamat Saat Ini: JL Pondok Indah"
             android:textColor="@color/primary"
             android:textSize="14sp" />
+
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="16dp"
             android:background="@android:color/darker_gray" />
+
+
+        <TextView
+            android:id="@+id/tvLocationStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Lokasi: -"
+            android:layout_marginTop="16dp"
+            />
+
 
         <!-- Konfirmasi -->
         <TextView
@@ -308,7 +331,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/danger"
                 android:fontFamily="@font/poppins"
-                android:text="tidak"
+                android:text="Tidak"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white" />
 
@@ -320,7 +343,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="@color/primary"
                 android:fontFamily="@font/poppins"
-                android:text="iya"
+                android:text="Ya"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white" />
         </LinearLayout>
