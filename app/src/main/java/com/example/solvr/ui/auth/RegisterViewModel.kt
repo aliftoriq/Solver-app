@@ -3,10 +3,12 @@ package com.example.solvr.viewmodel.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.solvr.models.AuthDTO
 import com.example.solvr.models.AuthDTO.RegisterRequest
 import com.example.solvr.models.CommonDTO.ResponseTemplate
 import com.example.solvr.repository.AuthRepository
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,25 +36,36 @@ class RegisterViewModel : ViewModel() {
             role = AuthDTO.Role(id = 1)
         )
 
-        authRepository.registerUser(request).enqueue(object : Callback<ResponseTemplate> {
-            override fun onResponse(call: Call<ResponseTemplate>, response: Response<ResponseTemplate>) {
-                _isLoading.value = false
-                if (response.isSuccessful) {
-                    _registerSuccess.value = true
-                } else {
-                    val message = when (response.code()) {
-                        400 -> "Bad request"
-                        409 -> "Email sudah terdaftar"
-                        else -> "Registrasi gagal (Error ${response.code()})"
+        viewModelScope.launch {
+            try {
+                authRepository.registerUser(request).enqueue(object : Callback<ResponseTemplate> {
+                    override fun onResponse(
+                        call: Call<ResponseTemplate>,
+                        response: Response<ResponseTemplate>
+                    ) {
+                        _isLoading.value = false
+                        if (response.isSuccessful) {
+                            _registerSuccess.value = true
+                        } else {
+                            val message = when (response.code()) {
+                                400 -> "Bad request"
+                                409 -> "Email sudah terdaftar"
+                                else -> "Registrasi gagal (Error ${response.code()})"
+                            }
+                            _errorMessage.value = message
+                        }
                     }
-                    _errorMessage.value = message
-                }
-            }
 
-            override fun onFailure(call: Call<ResponseTemplate>, t: Throwable) {
+                    override fun onFailure(call: Call<ResponseTemplate>, t: Throwable) {
+                        _isLoading.value = false
+                        _errorMessage.value = "Error: ${t.message}"
+                    }
+                })
+            } catch (e: Exception) {
                 _isLoading.value = false
-                _errorMessage.value = "Error: ${t.message}"
+                _errorMessage.value = "Error: ${e.message}"
             }
-        })
+        }
+
     }
 }

@@ -2,6 +2,7 @@ package com.example.solvr.ui.profile
 
 import android.Manifest
 import android.app.DatePickerDialog
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -28,9 +29,11 @@ import com.example.solvr.utils.FileUtil
 import com.example.solvr.utils.SessionManager
 import com.google.android.material.textfield.TextInputLayout
 import java.io.File
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.concurrent.CountDownLatch
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -106,8 +109,7 @@ class EditProfileActivity : AppCompatActivity() {
 
                     "selfie" -> {
                         ivSelfie.setImageURI(cameraImageUri)
-                        FileUtil.from(this, cameraImageUri)
-                            ?.let { viewModel.uploadSelfie(this, it) }
+                        FileUtil.from(this, cameraImageUri)?.let { viewModel.uploadSelfie(this, it) }
                     }
                 }
             }
@@ -287,18 +289,6 @@ class EditProfileActivity : AppCompatActivity() {
         )
     }
 
-    private fun loadUserImages(user: UserDTO.Data) {
-        if (user.urlProfilePicture != null) {
-            loadImageFromUrl(user.urlProfilePicture, ivProfilePicture)
-        }
-        if (user.urlKtp != null) {
-            loadImageFromUrl(user.urlKtp, ivKtp)
-        }
-        if (user.urlSelfie != null) {
-            loadImageFromUrl(user.urlSelfie, ivSelfie)
-        }
-    }
-
     private fun applyFadeInAnimationToFields() {
         val animFadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
         val formFields = listOf(
@@ -404,19 +394,50 @@ class EditProfileActivity : AppCompatActivity() {
         btnSave.isEnabled = enabled
     }
 
-    private fun loadImageFromUrl(url: String, imageView: ImageView) {
-        Thread {
-            try {
-                val inputStream = java.net.URL(url).openStream()
-                val bitmap = android.graphics.BitmapFactory.decodeStream(inputStream)
-                runOnUiThread {
-                    imageView.setImageBitmap(bitmap)
+    private fun loadUserImages(user: UserDTO.Data) {
+        val urls = listOfNotNull(
+            user.urlProfilePicture,
+            user.urlKtp,
+            user.urlSelfieWithKtp
+        )
+
+        val imageViews = listOfNotNull(
+            user.urlProfilePicture?.let { ivProfilePicture },
+            user.urlKtp?.let { ivKtp },
+            user.urlSelfieWithKtp?.let { ivSelfie }
+        )
+
+        if (urls.isEmpty()) return
+
+        showLoading(true)
+        val latch = CountDownLatch(urls.size)
+
+        for (i in urls.indices) {
+            Thread {
+                try {
+                    val inputStream = URL(urls[i]).openStream()
+                    val bitmap = BitmapFactory.decodeStream(inputStream)
+                    imageViews[i].post {
+                        imageViews[i].setImageBitmap(bitmap)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                } finally {
+                    latch.countDown()
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
+            }.start()
+        }
+
+        Thread {
+            latch.await()
+            runOnUiThread {
+                showLoading(false)
             }
         }.start()
     }
+
+
+
 
     // Loading state management methods
     private fun showLoading(show: Boolean) {

@@ -43,6 +43,6 @@ class UserDTO {
         val monthlyIncome: Any? = null,
         val urlProfilePicture: String? = null,
         val urlKtp: String? = null,
-        val urlSelfie: String? = null
+        val urlSelfieWithKtp: String? = null
     )
 }

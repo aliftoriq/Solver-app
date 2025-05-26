@@ -35,6 +35,10 @@ googleLocation = "21.0.1"
 viewpager2 = "1.0.0"
 androidx-core = "1.12.0"
 
+hilt = "2.46.1"
+
+room = "2.6.1"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -71,13 +75,20 @@ viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref =
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
 lottie = { group = "com.airbnb.android", name = "lottie", version = "6.0.0" }
 
+hilt-android = { group = "com.google.dagger", name = "hilt.android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt.android.compiler", version.ref = "hilt" }
+
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 
-
+dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 
 

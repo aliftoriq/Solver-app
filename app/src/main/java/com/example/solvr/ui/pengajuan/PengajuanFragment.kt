@@ -156,7 +156,6 @@ class PengajuanFragment : Fragment() {
 
         activeLoanApplicationContainer.visibility = View.GONE
 
-        // Update nominal pinjaman
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
                 selectedAmount = (progress / 100000) * 100000

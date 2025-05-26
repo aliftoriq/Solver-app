@@ -2,7 +2,13 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+//    id("com.google.dagger.hilt.android") version "2.56.2" apply true
+//    id("kotlin-kapt")
+//    kotlin("kapt")
+    id("com.google.dagger.hilt.android") version "2.46.1" apply true
+    id("kotlin-kapt")
 }
+
 
 android {
     namespace = "com.example.solvr"
@@ -74,6 +80,25 @@ dependencies {
     implementation(libs.viewpager2)
     implementation(libs.core.ktx)
     implementation(libs.lottie)
+
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
+
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.46.1")
+    kapt("com.google.dagger:hilt-compiler:2.46.1")
+
+//    implementation("com.google.dagger:hilt-android:2.56.2")
+//    annotationProcessor("com.google.dagger:hilt-compiler:2.56.2")
+//
+//// FIX: Pakai javapoet terbaru
+//    implementation("com.squareup:javapoet:1.13.0")
+
+
 
 //    implementation(libs.play.services.location)
 }

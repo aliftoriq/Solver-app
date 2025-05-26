@@ -66,6 +66,7 @@ class EditProfileViewModel : ViewModel() {
 
             override fun onFailure(call: Call<UserDTO.Response>, t: Throwable) {
                 _errorMessage.postValue("Kesalahan jaringan: ${t.message}")
+                _isLoadingg.postValue(false)
             }
         })
     }
@@ -78,12 +79,15 @@ class EditProfileViewModel : ViewModel() {
                 if (response.isSuccessful && response.body() != null) {
                     _userDetail.postValue(response.body()?.data)
                     _updateSuccess.postValue(true)
+                    _isLoadingg.postValue(false)
                 } else {
+                    _isLoadingg.postValue(false)
                     _errorMessage.postValue("Gagal membuat user.")
                 }
             }
 
             override fun onFailure(call: Call<UserDTO.Response>, t: Throwable) {
+                _isLoadingg.postValue(false)
                 _errorMessage.postValue("Kesalahan jaringan saat membuat user: ${t.message}")
             }
         })
@@ -97,12 +101,15 @@ class EditProfileViewModel : ViewModel() {
                 if (response.isSuccessful && response.body() != null) {
                     _userDetail.postValue(response.body()?.data)
                     _updateSuccess.postValue(true)
+                    _isLoadingg.postValue(false)
                 } else {
+                    _isLoadingg.postValue(false)
                     _errorMessage.postValue("Gagal memperbarui data.")
                 }
             }
 
             override fun onFailure(call: Call<UserDTO.Response>, t: Throwable) {
+                _isLoadingg.postValue(false)
                 _errorMessage.postValue("Kesalahan jaringan saat update: ${t.message}")
             }
         })
@@ -115,13 +122,16 @@ class EditProfileViewModel : ViewModel() {
         ApiClient.userService.uploadProfileImage(body).enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
+                    _isLoadingg.postValue(false)
                     _uploadResult.postValue(true)
                 } else {
+                    _isLoadingg.postValue(false)
                     _errorMessage.postValue("Gagal upload: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
+                _isLoadingg.postValue(false)
                 _errorMessage.postValue("Error: ${t.localizedMessage}")
             }
         })
@@ -132,19 +142,21 @@ class EditProfileViewModel : ViewModel() {
         val body = MultipartBody.Part.createFormData("file", imageFile.name, requestFile)
 
         ApiClient.userService.uploadKtpImage(body).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        _isLoadingg.postValue(false)
-                        _uploadResult.postValue(true)
-                    } else {
-                        _errorMessage.postValue("Gagal upload: ${response.code()}")
-                    }
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    _isLoadingg.postValue(false)
+                    _uploadResult.postValue(true)
+                } else {
+                    _isLoadingg.postValue(false)
+                    _errorMessage.postValue("Gagal upload: ${response.code()}")
                 }
+            }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    _errorMessage.postValue("Error: ${t.localizedMessage}")
-                }
-            })
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                _isLoadingg.postValue(false)
+                _errorMessage.postValue("Error: ${t.localizedMessage}")
+            }
+        })
     }
 
     fun uploadSelfie(context: Context, imageFile: File) {
@@ -152,17 +164,19 @@ class EditProfileViewModel : ViewModel() {
         val body = MultipartBody.Part.createFormData("file", imageFile.name, requestFile)
 
         ApiClient.userService.uploadSelfieImage(body).enqueue(object : Callback<Void> {
-                override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                    if (response.isSuccessful) {
-                        _uploadResult.postValue(true)
-                    } else {
-                        _errorMessage.postValue("Gagal upload: ${response.code()}")
-                    }
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    _isLoadingg.postValue(false)
+                    _uploadResult.postValue(true)
+                } else {
+                    _errorMessage.postValue("Gagal upload: ${response.code()}")
                 }
+            }
 
-                override fun onFailure(call: Call<Void>, t: Throwable) {
-                    _errorMessage.postValue("Error: ${t.localizedMessage}")
-                }
-            })
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                _isLoadingg.postValue(false)
+                _errorMessage.postValue("Error: ${t.localizedMessage}")
+            }
+        })
     }
 }
