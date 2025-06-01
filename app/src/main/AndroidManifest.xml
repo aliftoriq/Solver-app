@@ -19,7 +19,9 @@
         android:maxSdkVersion="32"
         tools:ignore="ScopedStorage" />
 
+<!--        android:name=".App" -->
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
@@ -24,11 +25,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresPermission
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.solvr.R
 import com.example.solvr.models.LoanDTO
 import com.example.solvr.ui.auth.LoginActivity
+import com.example.solvr.ui.history.HistoryFragment
+import com.example.solvr.ui.plafond.PlafondFragment
 import com.example.solvr.ui.profile.EditProfileActivity
 import com.example.yourapp.utils.SwitchAllertCustom
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -54,6 +58,8 @@ class PengajuanFragment : Fragment() {
     private lateinit var viewModel: PengajuanViewModel
     private lateinit var loanCard: CardView
 
+    private lateinit var btnHistory: TextView
+
     private lateinit var tvName: TextView
     private lateinit var tvPlafonPackage: TextView
     private lateinit var tvRekening: TextView
@@ -70,16 +76,14 @@ class PengajuanFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private var userConfirmedSubmission = false
+    private var currentLocation: Location? = null
 
     private lateinit var locationCallback: LocationCallback
     private lateinit var locationRequest: LocationRequest
 
-
-
     private var selectedAmount: Int = 1_000_000
     private var selectedTenor: Int = 6
     private var interestRate: Double = 0.015
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,6 +94,8 @@ class PengajuanFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val animTop = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_top)
         val animBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_bottom)
         val animLeft = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_out_left)
@@ -99,38 +105,43 @@ class PengajuanFragment : Fragment() {
 
         view.findViewById<FrameLayout>(R.id.headerContainer).startAnimation(animBottom)
 
+        // Initialize location services
+        initializeLocationServices()
+
+        // Initialize UI components
+        initializeUI(view)
+
+        // Set up observers
+        setupObservers()
+
+        // Request location permission and get location immediately
+        requestLocationPermissionAndGetLocation()
+
+        // Fetch loan summary
+        viewModel.fetchLoanSummary()
+    }
+
+    private fun initializeLocationServices() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        locationRequest = LocationRequest.create().apply {
-            interval = 10000 // 10 detik
-            fastestInterval = 5000
-            priority = Priority.PRIORITY_HIGH_ACCURACY
-        }
+
+        locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000L)
+            .setWaitForAccurateLocation(false)
+            .setMinUpdateIntervalMillis(2000L)
+            .setMaxUpdateDelayMillis(10000L)
+            .build()
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
                 val location = result.lastLocation ?: return
-                Log.d("Location", "Real-time location: ${location.latitude}, ${location.longitude}")
+                currentLocation = location
+                Log.d("Location", "Location updated: ${location.latitude}, ${location.longitude}")
 
-                // Kirim data pinjaman dengan lokasi
-                val request = LoanDTO.Request(
-                    loanAmount = selectedAmount.toDouble(),
-                    loanTenor = selectedTenor,
-                    longitude = location.longitude,
-                    latitude = location.latitude
-                )
-
-                viewModel.applyLoan(request)
-                loanCard.visibility = View.INVISIBLE
-                shimmerLayout.startShimmer()
-                shimmerLayout.visibility = View.VISIBLE
-
-                // Stop location updates setelah dapat lokasi
                 fusedLocationClient.removeLocationUpdates(this)
             }
         }
+    }
 
-
-        // Init shimmer AFTER inflating the view
+    private fun initializeUI(view: View) {
         shimmerLayout = view.findViewById(R.id.shimmerLoanCard)
         shimmerLayout.startShimmer()
 
@@ -154,8 +165,18 @@ class PengajuanFragment : Fragment() {
         tvCicilan = view.findViewById(R.id.tvCicilan)
         activeLoanApplicationContainer = view.findViewById(R.id.activeLoanApplicationContainer)
 
+        btnHistory = view.findViewById(R.id.btnHistory)
+
         activeLoanApplicationContainer.visibility = View.GONE
 
+        btnHistory.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HistoryFragment())
+                .addToBackStack(null)
+                .commit()
+        }
+
+        // SeekBar listener
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(sb: SeekBar?, progress: Int, fromUser: Boolean) {
                 selectedAmount = (progress / 100000) * 100000
@@ -166,71 +187,74 @@ class PengajuanFragment : Fragment() {
             override fun onStopTrackingTouch(sb: SeekBar?) {}
         })
 
+        // Tenor button setup
         val allTenorButtons = listOf(
-            view.findViewById<MaterialButton>(R.id.btnTenor3),
-            view.findViewById<MaterialButton>(R.id.btnTenor6),
-            view.findViewById<MaterialButton>(R.id.btnTenor9),
-            view.findViewById<MaterialButton>(R.id.btnTenor12)
+            view.findViewById<MaterialButton>(R.id.btnTenor3Pengajuan),
+            view.findViewById<MaterialButton>(R.id.btnTenor6Pengajuan),
+            view.findViewById<MaterialButton>(R.id.btnTenor9Pengajuan),
+            view.findViewById<MaterialButton>(R.id.btnTenor12Pengajuan)
         )
 
-        // Pilih tenor
         toggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
-
                 allTenorButtons.forEach { button ->
                     if (button.id == checkedId) {
-                        // Change selected button to primary color
-                        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.secondary))
+                        button.setBackgroundColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.secondary
+                            )
+                        )
                         button.setTextColor(Color.WHITE)
                     } else {
-                        // Reset unselected buttons to secondary color
-                        button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.primary))
-                        button.setTextColor(Color.WHITE )
+                        button.setBackgroundColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.primary
+                            )
+                        )
+                        button.setTextColor(Color.WHITE)
                     }
                 }
 
                 selectedTenor = when (checkedId) {
-                    R.id.btnTenor3 -> 3
-                    R.id.btnTenor6 -> 6
-                    R.id.btnTenor9 -> 9
-                    R.id.btnTenor12 -> 12
+                    R.id.btnTenor3Pengajuan -> 3
+                    R.id.btnTenor6Pengajuan -> 6
+                    R.id.btnTenor9Pengajuan -> 9
+                    R.id.btnTenor12Pengajuan -> 12
                     else -> 6
                 }
             }
         }
 
-//        // Ajukan pinjaman
-//        btnSubmitLoan.setOnClickListener {
-//            val switchAlert = SwitchAllertCustom(requireContext())
-//            switchAlert.show(
-//                message = "Apakah Anda yakin untuk mengajukan?",
-//                onYes = {
-//                    userConfirmedSubmission = true
-//                    locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-//                },
-//                onNo = {
-//                    userConfirmedSubmission = false
-//                }
-//            )
-//        }
-
-
+        // Submit button listener
         btnSubmitLoan.setOnClickListener {
-            locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            if (hasLocationPermission()) {
+                showPreviewDialog()
+            } else {
+                locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
         }
+    }
 
+    private fun setupObservers() {
         viewModel.loanDetail.observe(viewLifecycleOwner) { response ->
             response?.let {
-                Toast.makeText(
-                    requireContext(),
-                    "Pengajuan berhasil: ${it.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                //       //       Toast.makeText(
+//                    requireContext(),
+//                    "Pengajuan berhasil: ${it.message}",
+//                    Toast.LENGTH_SHORT
+//                ).show()
                 viewModel.fetchLoanSummary()
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     loanCard.visibility = View.VISIBLE
-                    loanCard.startAnimation(animBottom)
+                    loanCard.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            R.anim.slide_in_bottom
+                        )
+                    )
                     shimmerLayout.stopShimmer()
                     shimmerLayout.visibility = View.GONE
                 }, 1000)
@@ -239,7 +263,7 @@ class PengajuanFragment : Fragment() {
 
         viewModel.isExceedPlafon.observe(viewLifecycleOwner) { error ->
             error?.let {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+                //       //       Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -270,18 +294,22 @@ class PengajuanFragment : Fragment() {
                 }
 
                 else -> {
-                    Toast.makeText(requireContext(), errorCode, Toast.LENGTH_SHORT).show()
+                    //       //       Toast.makeText(requireContext(), errorCode, Toast.LENGTH_SHORT).show()
                 }
             }
 
             Handler(Looper.getMainLooper()).postDelayed({
                 loanCard.visibility = View.VISIBLE
-                loanCard.startAnimation(animBottom)
+                loanCard.startAnimation(
+                    AnimationUtils.loadAnimation(
+                        requireContext(),
+                        R.anim.slide_in_bottom
+                    )
+                )
                 shimmerLayout.stopShimmer()
                 shimmerLayout.visibility = View.GONE
             }, 1000)
         }
-
 
         viewModel.loanSummary.observe(viewLifecycleOwner) { summary ->
             summary?.let {
@@ -293,44 +321,109 @@ class PengajuanFragment : Fragment() {
 
                 interestRate = (it.data?.plafonPackage?.interestRate ?: 0.015) as Double
 
-                val remainingLoan = it.data?.remainingPlafon?.toString()?.toDoubleOrNull() ?: 10_000_000.0
+                val remainingLoan =
+                    it.data?.remainingPlafon?.toString()?.toDoubleOrNull() ?: 10_000_000.0
                 val maxLoan = maxOf(remainingLoan.toInt())
                 seekBar.max = maxLoan
 
-               if (it.data?.activeLoanApplication != null){
-                   tvReviewStatus.text = it.data.activeLoanApplication.status ?: "-"
-                   tvTangal.text = it.data.activeLoanApplication.requestedAt ?: "-"
-                   tvJumlahPinjaman.text = formatRupiah((it.data.activeLoanApplication.loanAmount ?: 0.0).toInt())
+                if (it.data?.activeLoanApplication != null) {
+                    tvReviewStatus.text = it.data.activeLoanApplication.status ?: "-"
+                    tvTangal.text = it.data.activeLoanApplication.requestedAt ?: "-"
+                    tvJumlahPinjaman.text =
+                        formatRupiah((it.data.activeLoanApplication.loanAmount ?: 0.0).toInt())
 
-                   val monthlyInstallment = it.data.activeLoanApplication.monthlyPayment?.let { formatRupiah(it.toInt()) } ?: "-"
-                   tvCicilan.text = monthlyInstallment
-               }
+                    val monthlyInstallment =
+                        it.data.activeLoanApplication.monthlyPayment?.let { formatRupiah(it.toInt()) }
+                            ?: "-"
+                    tvCicilan.text = monthlyInstallment
+                }
 
                 Handler(Looper.getMainLooper()).postDelayed({
                     if (it.data?.activeLoanApplication?.status != null) {
                         activeLoanApplicationContainer.visibility = View.VISIBLE
-                        activeLoanApplicationContainer.startAnimation(animFadeIn)
+                        activeLoanApplicationContainer.startAnimation(
+                            AnimationUtils.loadAnimation(
+                                requireContext(),
+                                R.anim.fade_in
+                            )
+                        )
                     }
                     loanCard.visibility = View.VISIBLE
-                    loanCard.startAnimation(animBottom)
+                    loanCard.startAnimation(
+                        AnimationUtils.loadAnimation(
+                            requireContext(),
+                            R.anim.slide_in_bottom
+                        )
+                    )
                     shimmerLayout.stopShimmer()
                     shimmerLayout.visibility = View.GONE
                 }, 1000)
-
             }
         }
+    }
 
-        viewModel.fetchLoanSummary()
+    private fun hasLocationPermission(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 
+    private fun requestLocationPermissionAndGetLocation() {
+        if (hasLocationPermission()) {
+            getCurrentLocation()
+        } else {
+            locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getCurrentLocation() {
+        // Try to get last known location first
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            if (location != null && isLocationRecentAndAccurate(location)) {
+                currentLocation = location
+                Log.d(
+                    "Location",
+                    "Got last known location: ${location.latitude}, ${location.longitude}"
+                )
+            } else {
+                // Request fresh location updates
+                Log.d("Location", "Requesting fresh location updates...")
+                fusedLocationClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    Looper.getMainLooper()
+                )
+
+                // Stop location updates after 15 seconds if no location received
+                Handler(Looper.getMainLooper()).postDelayed({
+                    fusedLocationClient.removeLocationUpdates(locationCallback)
+                }, 15000)
+            }
+        }.addOnFailureListener { exception ->
+            Log.e("Location", "Failed to get location", exception)
+            // Still try to request location updates
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+        }
+    }
+
+    private fun isLocationRecentAndAccurate(location: Location): Boolean {
+        val locationAge = System.currentTimeMillis() - location.time
+        return locationAge < 5 * 60 * 1000 && location.accuracy < 100 // 5 minutes and 100m accuracy
     }
 
     private val locationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            showPreviewDialog()
+            getCurrentLocation()
         } else {
-            Toast.makeText(requireContext(), "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
+            //       //       Toast.makeText(requireContext(), "Izin lokasi diperlukan untuk mengajukan pinjaman", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -340,31 +433,72 @@ class PengajuanFragment : Fragment() {
         return format.format(number).replace(",00", "")
     }
 
-
     @SuppressLint("MissingPermission")
     private fun getCurrentLocationAndSubmit() {
-        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-            val loc = location ?: return@addOnSuccessListener
-            Log.d("Location", "Latitude: ${loc.latitude}, Longitude: ${loc.longitude}")
+        if (currentLocation != null) {
+            // Use cached location if available
+            submitWithLocation(currentLocation!!)
+        } else {
+            // Get fresh location
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                if (location != null) {
+                    submitWithLocation(location)
+                } else {
+                    // Request new location update
+                    val tempCallback = object : LocationCallback() {
+                        override fun onLocationResult(result: LocationResult) {
+                            val loc = result.lastLocation
+                            if (loc != null) {
+                                submitWithLocation(loc)
+                                fusedLocationClient.removeLocationUpdates(this)
+                            }
+                        }
+                    }
 
-            val request = LoanDTO.Request(
-                loanAmount = selectedAmount.toDouble(),
-                loanTenor = selectedTenor,
-                longitude = loc.longitude,
-                latitude = loc.latitude
-            )
+                    fusedLocationClient.requestLocationUpdates(
+                        locationRequest,
+                        tempCallback,
+                        Looper.getMainLooper()
+                    )
 
-            viewModel.applyLoan(request)
-            loanCard.visibility = View.INVISIBLE
-            shimmerLayout.startShimmer()
-            shimmerLayout.visibility = View.VISIBLE
-        }.addOnFailureListener {
-            Toast.makeText(requireContext(), "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
+                    // Timeout after 10 seconds
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        fusedLocationClient.removeLocationUpdates(tempCallback)
+                        //       //       Toast.makeText(requireContext(), "Gagal mendapatkan lokasi terkini", Toast.LENGTH_SHORT).show()
+                    }, 10000)
+                }
+            }.addOnFailureListener {
+                //       //       Toast.makeText(requireContext(), "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    private fun submitWithLocation(location: Location) {
+        Log.d("Location", "Submitting with location: ${location.latitude}, ${location.longitude}")
+
+        val request = LoanDTO.Request(
+            loanAmount = selectedAmount.toDouble(),
+            loanTenor = selectedTenor,
+            longitude = location.longitude,
+            latitude = location.latitude
+        )
+
+        viewModel.applyLoan(request)
+        loanCard.visibility = View.INVISIBLE
+        shimmerLayout.startShimmer()
+        shimmerLayout.visibility = View.VISIBLE
     }
 
     @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
     private fun showPreviewDialog() {
+
+        viewModel.calculateMonthlyPayment(
+            LoanDTO.RequestCalculate(
+                loanAmount = selectedAmount.toDouble(),
+                loanTenor = selectedTenor,
+            )
+        )
+
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.layout_konfirmasi_pengajuan)
@@ -379,32 +513,36 @@ class PengajuanFragment : Fragment() {
 
         val tvLocationStatus = dialog.findViewById<TextView>(R.id.tvLocationStatus)
 
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location: Location? ->
+        // Check if we have current location
+        if (currentLocation != null) {
+            val latitude = currentLocation!!.latitude
+            val longitude = currentLocation!!.longitude
+            tvLocationStatus.text = "Lokasi: $latitude, $longitude"
+            isiDataPreview(dialog)
+        } else {
+            // Try to get location again
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 if (location != null) {
+                    currentLocation = location
                     val latitude = location.latitude
                     val longitude = location.longitude
                     tvLocationStatus.text = "Lokasi: $latitude, $longitude"
-
-                    // Lanjut isi semua field preview (cicilan, total, dll)
                     isiDataPreview(dialog)
-
                 } else {
                     dialog.dismiss()
                     SwitchAllertCustom(requireContext()).show(
                         message = "Gagal mendapatkan lokasi. Mohon aktifkan GPS terlebih dahulu.",
                         onYes = {
-                            // Arahkan ke pengaturan lokasi
                             startActivity(Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                         },
                         onNo = { }
                     )
                 }
-            }
-            .addOnFailureListener {
+            }.addOnFailureListener {
                 dialog.dismiss()
-                Toast.makeText(requireContext(), "Terjadi kesalahan saat mendapatkan lokasi", Toast.LENGTH_SHORT).show()
+                //       //       Toast.makeText(requireContext(), "Terjadi kesalahan saat mendapatkan lokasi", Toast.LENGTH_SHORT).show()
             }
+        }
 
         dialog.show()
     }
@@ -421,24 +559,26 @@ class PengajuanFragment : Fragment() {
         val txtAccountNumber = dialog.findViewById<TextView>(R.id.txtAccountNumber)
         val txtAddress = dialog.findViewById<TextView>(R.id.txtAddress)
 
-        val totalInterest = selectedAmount * interestRate
-        val adminFee = 50000.0
-        val totalPayment = selectedAmount + totalInterest + adminFee
-        val monthlyInstallment = totalPayment / selectedTenor
-        val disbursedAmount = selectedAmount - adminFee
+        viewModel.calculateLoan.observe(viewLifecycleOwner) { response ->
+            val data = response?.data ?: return@observe
 
-        txtCicilan.text = formatRupiah(monthlyInstallment.toInt())
-        txtTotal.text = formatRupiah(totalPayment.toInt())
-        txtBunga.text = formatRupiah(totalInterest.toInt())
-        txtAdmin.text = formatRupiah(adminFee.toInt())
+            txtCicilan.text = formatRupiah(data.monthlyPayment?.toInt() ?: 0)
+            txtTotal.text = formatRupiah(data.totalPayment?.toInt() ?: 0)
+            txtBunga.text = formatRupiah(data.totalInterest?.toInt() ?: 0)
+            txtAdmin.text = formatRupiah(data.adminFee?.toInt() ?: 0)
 
-        txtRate.text = "Rate: ${(interestRate * 100)}%"
-        txtPinjaman.text = "Pinjaman: ${formatRupiah(selectedAmount)}"
-        txtTenor.text = "Tenor: $selectedTenor bulan"
+            txtRate.text = "Rate: ${data.rate ?: 0.0}%"
+            txtPinjaman.text = "Pinjaman: ${formatRupiah(data.amount?.toInt() ?: 0)}"
+            txtTenor.text = "Tenor: ${data.tenor ?: 0} bulan"
 
-        txtDisbursedAmount.text = formatRupiah(disbursedAmount.toInt())
-        txtAccountNumber.text = "2910–025–5465"
-        txtAddress.text = "Alamat Saat Ini: JL Pondok Indah No. 123, Jakarta Selatan"
+            txtDisbursedAmount.text = formatRupiah(data.amountDisbursed?.toInt() ?: 0)
+            txtAccountNumber.text = data.accountNumber ?: "-"
+            txtAddress.text = "Alamat Saat Ini: ${data.address ?: "-"}"
+
+            txtDisbursedAmount.text = formatRupiah(data.amountDisbursed?.toInt() ?: 0)
+            txtAccountNumber.text = data.accountNumber ?: "-"
+            txtAddress.text = "Alamat Saat Ini: ${data.address ?: "-"}"
+        }
 
         dialog.findViewById<Button>(R.id.btnCancel).setOnClickListener {
             dialog.dismiss()
@@ -456,6 +596,19 @@ class PengajuanFragment : Fragment() {
             )
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        // Remove location updates when fragment is paused
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Clean up location updates
+        fusedLocationClient.removeLocationUpdates(locationCallback)
+    }
+
 
 //
 //    @RequiresPermission(allOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
@@ -482,7 +635,7 @@ class PengajuanFragment : Fragment() {
 //                    val longitude = location.longitude
 //                    tvLocationStatus.text = "Lokasi: $latitude, $longitude"
 //                } else {
-//                    Toast.makeText(requireContext(), "Gagal mendapatkan lokasi, Hidupkan GPS terlebih dahulu", Toast.LENGTH_SHORT).show()
+//                    //       //       Toast.makeText(requireContext(), "Gagal mendapatkan lokasi, Hidupkan GPS terlebih dahulu", Toast.LENGTH_SHORT).show()
 //                }
 //            }
 //            .addOnFailureListener {

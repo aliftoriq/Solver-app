@@ -94,6 +94,8 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var cameraImageUri: Uri
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            showLoading(true)
+
             if (success) {
                 when (imageTypeToUpload) {
                     "profile" -> {
@@ -130,13 +132,11 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        // Initialize loading views
         loadingOverlay = findViewById(R.id.loadingOverlay)
         loadingAnimation = findViewById(R.id.loadingAnimation)
         emptyStateAnimation = findViewById(R.id.emptyStateAnimation)
         emptyInfoCard = findViewById(R.id.tvEmptyInfo)
 
-        // Initialize form fields
         etName = findViewById(R.id.etName)
         etNik = findViewById(R.id.etNik)
         etAddress = findViewById(R.id.etAddress)
@@ -157,12 +157,10 @@ class EditProfileActivity : AppCompatActivity() {
         ivKtp = findViewById(R.id.ivKtp)
         ivSelfie = findViewById(R.id.ivSelfie)
 
-        // Setup dropdown for housing status
         val housingOptions = listOf("Milik Sendiri", "Milik Keluarga", "Menyewa", "Kos")
         val adapter = ArrayAdapter(this, R.layout.item_dropdown, housingOptions)
         housingStatusDropdown.setAdapter(adapter)
 
-        // Set username from session
         val sessionManager = SessionManager(this)
         findViewById<TextView>(R.id.displayName).text = sessionManager.getUserName()
     }
@@ -214,6 +212,8 @@ class EditProfileActivity : AppCompatActivity() {
             showLoading(false)
             if (user == null) {
                 isUserExist = false
+                ivSelfie.isEnabled = false
+                ivKtp.isEnabled = false
                 if (!etName.isEnabled) etName.setText(sessionManager.getUserName())
                 showEmptyState(true)
             } else {

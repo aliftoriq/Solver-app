@@ -15,6 +15,9 @@ interface PlafonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(plafons: List<PlafonEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(plafons: PlafonEntity)
+
     @Query("DELETE FROM plafon")
     suspend fun clearAll()
 }

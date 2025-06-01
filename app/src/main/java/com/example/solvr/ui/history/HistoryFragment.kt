@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -53,6 +54,9 @@ class HistoryFragment : Fragment() {
                 recyclerView.startAnimation(animBottom)
                 adapter.updateData(history)
             } else {
+                val tvTidakAdaData = view.findViewById<TextView>(R.id.tvTidakAdaData)
+                tvTidakAdaData.visibility = View.VISIBLE
+                tvTidakAdaData.startAnimation(animBottom)
                 showError("No loan history available")
             }
         }

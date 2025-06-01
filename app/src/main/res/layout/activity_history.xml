@@ -106,8 +106,19 @@
                 android:layout_margin="16dp"
                 android:clipToPadding="false"
                 tools:listitem="@layout/item_loan_history"
-                app:layout_constraintTop_toBottomOf="@id/etRiwayat"
                 app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+            <TextView
+                android:id="@+id/tvTidakAdaData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tidak ada Data"
+                android:fontFamily="@font/poppins_bold"
+                android:textColor="@color/primary"
+                android:visibility="gone"
+                android:layout_gravity="center"/>
+
 
         </LinearLayout>
     </LinearLayout>

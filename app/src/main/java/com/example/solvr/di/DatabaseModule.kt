@@ -7,21 +7,25 @@ import com.example.solvr.local.dao.PlafonDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DatabaseModule {
+class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(appContext: Context): AppDatabase {
+    fun provideDatabase(
+        @ApplicationContext appContext: Context
+    ): AppDatabase {
         return Room.databaseBuilder(
             appContext,
             AppDatabase::class.java,
             "solvr-db"
-        ).fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

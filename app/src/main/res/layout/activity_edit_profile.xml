@@ -128,15 +128,13 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_white_rounded"
                     android:orientation="vertical"
-                    android:padding="15dp"
-                    android:translationY="-40dp">
+                    android:padding="15dp">
 
                     <!-- Empty state section -->
                     <LinearLayout
                         android:id="@+id/tvEmptyInfo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:orientation="vertical">
 
                         <TextView
@@ -145,6 +143,7 @@
                             android:background="@drawable/bg_gradient_vertical_rd5"
                             android:drawableStart="@drawable/ic_nontification"
                             android:drawablePadding="15dp"
+                            android:visibility="invisible"
                             android:fontFamily="@font/poppins"
                             android:padding="10dp"
                             android:text="Lengkapi data Anda untuk mendapatkan layanan maksimal"

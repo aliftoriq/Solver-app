@@ -18,7 +18,7 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="60dp"
+            app:cardCornerRadius="15dp"
             app:cardElevation="4dp">
 
             <ImageView
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
-            android:text="Alif Toriq"
+            android:text="Solvr-gengs"
             android:textColor="@color/primary"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -296,6 +296,7 @@
             <TextView
                 android:id="@+id/btnHistory"
                 style="@style/ProfileOptionStyle"
+                android:visibility="gone"
                 android:text="History" />
 
 

@@ -2,13 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
-//    id("com.google.dagger.hilt.android") version "2.56.2" apply true
-//    id("kotlin-kapt")
-//    kotlin("kapt")
-    id("com.google.dagger.hilt.android") version "2.46.1" apply true
+    alias(libs.plugins.hilt)
     id("kotlin-kapt")
 }
-
 
 android {
     namespace = "com.example.solvr"

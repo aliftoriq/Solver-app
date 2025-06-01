@@ -12,16 +12,8 @@ import javax.inject.Singleton
 
 @Singleton
 class PlafonRepository @Inject constructor(
-    private val plafonService: PlafonService,
     private val plafonDao: PlafonDao
 ) {
-
-    // === Remote ===
-    fun getAllPlafonFromApi(): Call<PlafonDTO.ResponseAllPlafon> {
-        return plafonService.getAllPlafon()
-    }
-
-    // === Local ===
     suspend fun getLocalPlafon(): List<PlafonEntity> = withContext(Dispatchers.IO) {
         plafonDao.getAllPlafon()
     }
@@ -30,7 +22,15 @@ class PlafonRepository @Inject constructor(
         plafonDao.clearAll()
         plafonDao.insertAll(data)
     }
+
+    suspend fun cachePlafonDefault(data: PlafonEntity) = withContext(Dispatchers.IO) {
+        plafonDao.clearAll()
+        plafonDao.insert(data)
+    }
+
 }
+
+
 
 
 //class PlafonRepository @Inject constructor(

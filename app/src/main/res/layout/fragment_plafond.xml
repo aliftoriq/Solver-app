@@ -15,7 +15,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:padding="16dp">
 
             <ImageView
@@ -34,6 +33,19 @@
                 app:tint="@color/primary" />
         </RelativeLayout>
 
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Plafond saat ini"
+            android:textColor="@color/primary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
         <!--   CARD PLAFON SAAT INI     -->
         <RelativeLayout
             android:layout_width="match_parent"
@@ -47,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/card_bronze" />
+                android:src="@drawable/card" />
 
             <!-- Bronze Package -->
             <TextView
@@ -86,7 +98,7 @@
                 android:layout_below="@id/level_text"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="4dp"
-                android:text="Rate 1.5 - Tenor 6"
+                android:text="Rate 5.5 - Tenor 12"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
 
@@ -117,17 +129,79 @@
                 android:src="@drawable/solvr_landscape_white" />
         </RelativeLayout>
 
-
-        <TextView
+        <!-- Progress Plafon - Styled Like Simulation Result -->
+        <LinearLayout
+            android:id="@+id/plafonProgressContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:text="Plafond saat ini"
-            android:textColor="@color/primary"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="16dp"
+            android:visibility="gone"
+            android:background="@drawable/bg_gradient_vertical_rd5"
+            android:padding="16dp">
+
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Progress Plafon"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Info Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/tvPinjamanAktif"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Pinjaman Aktif: Rp -"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tvPlafon"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="Plafon: Rp -"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- Progress Bar -->
+            <ProgressBar
+                android:id="@+id/progressBarPlafon"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:progress="0"
+                android:max="100"
+                android:progressDrawable="@drawable/progress_bar_custom"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Persentase -->
+            <TextView
+                android:id="@+id/tvPersentase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Persentase: 0%"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+
 
         <FrameLayout
             android:id="@+id/headerContainer"
@@ -145,6 +219,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="16dp"
+                android:layout_gravity="right"
                 android:paddingHorizontal="20dp"
                 android:paddingBottom="20dp">
 
@@ -153,19 +228,7 @@
                     android:layout_height="43dp"
                     android:src="@drawable/solvr_landscape_white" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:text="Riwayat Pinjaman"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_arrow_rigth" />
             </LinearLayout>
         </FrameLayout>
 

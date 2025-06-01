@@ -41,6 +41,8 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
             sessionManager.clearSession()
             isUserLoggedIn.value = false
         }
+
+        ApiClient.authService.logout()
     }
 
     fun uploadProfileImage(context: Context, imageFile: File) {

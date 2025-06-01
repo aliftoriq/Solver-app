@@ -60,6 +60,8 @@ class ProfileFragment : Fragment() {
         val btnChangePassword = view.findViewById<LinearLayout>(R.id.btnChangePassword)
         val btnLogin = view.findViewById<LinearLayout>(R.id.btnLogin)
 
+        btnHistory.visibility = View.GONE
+
         profileViewModel.isUserLoggedIn.observe(viewLifecycleOwner) { isLoggedIn ->
             if (!isLoggedIn) {
 
@@ -69,7 +71,6 @@ class ProfileFragment : Fragment() {
                 btnPlafon.visibility = View.GONE
                 btnLogout.visibility = View.GONE
                 btnChangePassword.visibility = View.GONE
-
 
             }
         }
@@ -81,12 +82,12 @@ class ProfileFragment : Fragment() {
 
         profileViewModel.uploadResult.observe(viewLifecycleOwner) { success ->
             if (success) {
-                Toast.makeText(requireContext(), "Upload berhasil", Toast.LENGTH_SHORT).show()
+                //       //       //       Toast.makeText(requireContext(), "Upload berhasil", Toast.LENGTH_SHORT).show()
             }
         }
 
         profileViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
-            Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
+            //       //       //       Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
         }
 
         btnLogout.setOnClickListener {
@@ -114,7 +115,10 @@ class ProfileFragment : Fragment() {
         }
 
         btnPlafon.setOnClickListener {
-            startActivity(Intent(requireContext(), PlafondFragment::class.java))
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, PlafondFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         btnFaq.setOnClickListener {
@@ -146,7 +150,7 @@ class ProfileFragment : Fragment() {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             val imageUri = data.data!!
-            imageView.setImageURI(imageUri) // Tampilkan di ImageView
+            imageView.setImageURI(imageUri)
 
             val file = FileUtil.from(requireContext(), imageUri)
             profileViewModel.uploadProfileImage(requireContext(), file)

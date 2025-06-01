@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "plafon")
 data class PlafonEntity(
-    @PrimaryKey val id: Int,
+    @PrimaryKey val id: Int?,
     val interestRate: Double?,
     val amount: Int?,
     val level: Int?,

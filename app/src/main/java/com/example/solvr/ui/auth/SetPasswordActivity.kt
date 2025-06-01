@@ -36,7 +36,7 @@ class SetPasswordActivity : AppCompatActivity() {
             val confirmPass = edtConfirmPassword.text.toString()
 
             if (pass.isEmpty() || confirmPass.isEmpty()) {
-                Toast.makeText(this, "Password harus diisi", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Password harus diisi", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 

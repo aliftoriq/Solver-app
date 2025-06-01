@@ -255,7 +255,7 @@
                         android:src="@drawable/solvr_landscape_white" />
 
                     <TextView
-                        android:id="@+id/etRiwayat"
+                        android:id="@+id/btnHistory"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -452,66 +452,51 @@
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
 
+                <!-- Updated Tenor Buttons with MaterialButtonToggleGroup -->
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/tenorToggleGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    app:selectionRequired="true"
+                    app:singleSelection="true"
                     android:weightSum="4">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnTenor3"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/btnTenor3Pengajuan"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
-                        android:text="3"
-                        android:textColor="@android:color/white"
-                        app:backgroundTint="@color/primary"
-                        app:cornerRadius="8dp"
-                        app:strokeColor="@color/primary" />
+                        android:backgroundTint="@color/primary"
+                        android:text="3" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnTenor6"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/btnTenor6Pengajuan"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="6"
-                        android:textColor="@android:color/white"
-                        app:backgroundTint="@color/secondary"
-                        app:cornerRadius="8dp"
-                        app:strokeColor="@color/secondary" />
+                        android:backgroundTint="@color/secondary"
+                        android:text="6" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnTenor9"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/btnTenor9Pengajuan"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="9"
-                        android:textColor="@android:color/white"
-                        app:backgroundTint="@color/primary"
-                        app:cornerRadius="8dp"
-                        app:strokeColor="@color/primary" />
+                        android:backgroundTint="@color/primary"
+                        android:text="9" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnTenor12"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:id="@+id/btnTenor12Pengajuan"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="12"
-                        android:textColor="@android:color/white"
-                        app:backgroundTint="@color/secondary"
-                        app:cornerRadius="8dp"
-                        app:strokeColor="@color/secondary" />
-
+                        android:backgroundTint="@color/secondary"
+                        android:text="12" />
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 <Button
@@ -533,7 +518,20 @@
                     android:layout_marginTop="24dp"
                     android:background="@android:color/darker_gray" />
 
-<!--                <LinearLayout-->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnTenor6"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:text="6"
+                    android:textColor="@android:color/white"
+                    app:backgroundTint="@color/secondary"
+                    app:cornerRadius="8dp"
+                    app:strokeColor="@color/secondary" />
+
+                <!--                <LinearLayout-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="wrap_content"-->
 <!--                    android:background="@drawable/bg_gradient_vertical_rd5"-->

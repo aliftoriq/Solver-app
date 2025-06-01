@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.solvr.R
 import com.example.solvr.models.PlafonDTO
+import com.example.solvr.utils.FormatRupiah
 
 class PlafonAdapter(private val plafonList: List<PlafonDTO.DataItem>) :
     RecyclerView.Adapter<PlafonAdapter.PlafonViewHolder>() {
@@ -37,7 +38,7 @@ class PlafonAdapter(private val plafonList: List<PlafonDTO.DataItem>) :
             titlePackage.text = plafon.name
             levelText.text = "Level : ${plafon.level}"
             rateTenor.text = "Rate ${plafon.interestRate} - Tenor ${plafon.maxTenorMonths}"
-            nominal.text = "Rp. ${plafon.amount}"
+            nominal.text = FormatRupiah.format(plafon.amount?.toInt() ?: 0)
 
             if (plafon.level == 1) {
                 bgCard.setImageResource(R.drawable.card_bronze)

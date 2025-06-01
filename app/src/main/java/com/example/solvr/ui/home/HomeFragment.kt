@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.solvr.R
 import com.example.solvr.ui.pengajuan.PengajuanViewModel
+import com.example.solvr.utils.FormatRupiah
 import com.example.solvr.utils.SessionManager
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -47,6 +48,8 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
+        val formatRupiah = FormatRupiah
+
         viewModel = ViewModelProvider(this)[PengajuanViewModel::class.java]
 
         val animTop = AnimationUtils.loadAnimation(inflater.context, R.anim.slide_in_top)
@@ -67,6 +70,12 @@ class HomeFragment : Fragment() {
         val seekLoanAmount = view.findViewById<SeekBar>(R.id.seekLoanAmount)
         val edtLoanAmount = view.findViewById<TextInputEditText>(R.id.edtLoanAmount)
 
+        val simulationContainer =
+            view.findViewById<LinearLayout>(R.id.simulationResultContainer)
+
+        simulationContainer.visibility = View.GONE
+
+
         val greeting = when (hour) {
             in 4..10 -> "Selamat Pagi"
             in 11..14 -> "Selamat Siang"
@@ -74,7 +83,7 @@ class HomeFragment : Fragment() {
             else -> "Selamat Malam"
         }
 
-        var bungaPerBulan = 0.015
+        var bungaPerBulan = 0.055
         val biayaAdmin = 50_000.0
 
         tvTitlePackage = view.findViewById(R.id.title_package)
@@ -91,7 +100,6 @@ class HomeFragment : Fragment() {
 //        view.findViewById<MaterialButtonToggleGroup>(R.id.tenorToggleGroup).startAnimation(animBottom)
 
 
-//        <<- Section loan summary ->>
         viewModel.fetchLoanSummary()
 
         viewModel.loanSummary.observe(viewLifecycleOwner) { summary ->
@@ -102,7 +110,7 @@ class HomeFragment : Fragment() {
                     tvLevel.text = "Level : ${it.data?.plafonPackage?.level}"
                     tvRate.text =
                         "Rate ${it.data?.plafonPackage?.interestRate} - Tenor ${it.data?.plafonPackage?.maxTenorMonths}"
-                    tvNominal.text = "Rp. ${it.data?.plafonPackage?.amount}"
+                    tvNominal.text = formatRupiah.format(it.data?.plafonPackage?.amount ?: 0)
 
                     seekLoanAmount.max = (it.data?.remainingPlafon?.toInt() ?: 10_000_000) / 100_000
                     bungaPerBulan = (it.data?.plafonPackage?.interestRate ?: 0.015) as Double
@@ -157,11 +165,10 @@ class HomeFragment : Fragment() {
         )
 
         tenorToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            // Make sure only one button is selected
+
             if (isChecked) {
                 allTenorButtons.forEach { button ->
                     if (button.id == checkedId) {
-                        // Change selected button to primary color
                         button.setBackgroundColor(
                             ContextCompat.getColor(
                                 requireContext(),
@@ -170,7 +177,6 @@ class HomeFragment : Fragment() {
                         )
                         button.setTextColor(Color.WHITE)
                     } else {
-                        // Reset unselected buttons to secondary color
                         button.setBackgroundColor(
                             ContextCompat.getColor(
                                 requireContext(),
@@ -197,7 +203,7 @@ class HomeFragment : Fragment() {
         val btnSimulasi = view.findViewById<Button>(R.id.btnCalculate)
         btnSimulasi.setOnClickListener {
             if (selectedAmount == 0 || selectedTenor == 0) {
-                Toast.makeText(
+                       Toast.makeText(
                     requireContext(),
                     "Pilih nominal dan tenor terlebih dahulu.",
                     Toast.LENGTH_SHORT
@@ -209,12 +215,19 @@ class HomeFragment : Fragment() {
             val totalPembayaran = selectedAmount + totalBunga + biayaAdmin
             val cicilanBulanan = totalPembayaran / selectedTenor
 
-            val simulationContainer =
-                view.findViewById<LinearLayout>(R.id.simulationResultContainer)
+
             val txtCicilan = view.findViewById<TextView>(R.id.txtCicilanBulanan)
             val txtTotal = view.findViewById<TextView>(R.id.txtTotalPembayaran)
             val txtBunga = view.findViewById<TextView>(R.id.txtBiayaBunga)
             val txtAdmin = view.findViewById<TextView>(R.id.txtBiayaAdmin)
+
+            val txtTenor = view.findViewById<TextView>(R.id.txtTenor)
+            val txtPinjaman = view.findViewById<TextView>(R.id.txtPinjaman)
+            val txtRate = view.findViewById<TextView>(R.id.txtRate)
+
+            txtTenor.text = "$selectedTenor Bulan"
+            txtPinjaman.text = "Rp ${selectedAmount.toInt().formatRupiah()}"
+            txtRate.text = "${(bungaPerBulan*100)}%"
 
             txtCicilan.text = "Rp ${cicilanBulanan.toInt().formatRupiah()}"
             txtTotal.text = "Rp ${totalPembayaran.toInt().formatRupiah()}"
@@ -222,6 +235,7 @@ class HomeFragment : Fragment() {
             txtAdmin.text = "Rp ${biayaAdmin.toInt().formatRupiah()}"
 
             simulationContainer.visibility = View.VISIBLE
+            simulationContainer.startAnimation(animTop)
         }
 
         return view
