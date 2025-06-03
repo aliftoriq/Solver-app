@@ -143,7 +143,6 @@
                             android:background="@drawable/bg_gradient_vertical_rd5"
                             android:drawableStart="@drawable/ic_nontification"
                             android:drawablePadding="15dp"
-                            android:visibility="invisible"
                             android:fontFamily="@font/poppins"
                             android:padding="10dp"
                             android:text="Lengkapi data Anda untuk mendapatkan layanan maksimal"

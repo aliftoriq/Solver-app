@@ -35,6 +35,7 @@ class HomeFragment : Fragment() {
     private var selectedAmount = 0
 
     private lateinit var viewModel: PengajuanViewModel
+    private lateinit var viewModelHome: HomeViewModel
 
     private lateinit var tvTitlePackage: TextView
     private lateinit var tvLevel: TextView
@@ -51,6 +52,7 @@ class HomeFragment : Fragment() {
         val formatRupiah = FormatRupiah
 
         viewModel = ViewModelProvider(this)[PengajuanViewModel::class.java]
+        viewModelHome = ViewModelProvider(this)[HomeViewModel::class.java]
 
         val animTop = AnimationUtils.loadAnimation(inflater.context, R.anim.slide_in_top)
         val animBottom = AnimationUtils.loadAnimation(inflater.context, R.anim.slide_in_bottom)
@@ -211,10 +213,7 @@ class HomeFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            val totalBunga = selectedAmount * bungaPerBulan * selectedTenor
-            val totalPembayaran = selectedAmount + totalBunga + biayaAdmin
-            val cicilanBulanan = totalPembayaran / selectedTenor
-
+            viewModelHome.hitungSimulasi(selectedAmount, selectedTenor, bungaPerBulan, biayaAdmin.toInt())
 
             val txtCicilan = view.findViewById<TextView>(R.id.txtCicilanBulanan)
             val txtTotal = view.findViewById<TextView>(R.id.txtTotalPembayaran)
@@ -229,10 +228,21 @@ class HomeFragment : Fragment() {
             txtPinjaman.text = "Rp ${selectedAmount.toInt().formatRupiah()}"
             txtRate.text = "${(bungaPerBulan*100)}%"
 
-            txtCicilan.text = "Rp ${cicilanBulanan.toInt().formatRupiah()}"
-            txtTotal.text = "Rp ${totalPembayaran.toInt().formatRupiah()}"
-            txtBunga.text = "Rp ${totalBunga.toInt().formatRupiah()}"
-            txtAdmin.text = "Rp ${biayaAdmin.toInt().formatRupiah()}"
+
+            viewModelHome.simulasiResult.observe(viewLifecycleOwner) { result ->
+                result?.let {
+                    txtCicilan.text = it.cicilanBulanan.formatRupiah()
+                    txtTotal.text = it.totalPembayaran.formatRupiah()
+                    txtBunga.text = it.bunga.formatRupiah()
+                    txtAdmin.text = it.admin.formatRupiah()
+
+                    txtTenor.text = "${it.tenor} bulan"
+                    txtPinjaman.text = it.pinjaman.formatRupiah()
+                    txtRate.text = "${(it.ratePerBulan * 100)}% / bulan"
+
+                    simulationContainer.visibility = View.VISIBLE
+                }
+            }
 
             simulationContainer.visibility = View.VISIBLE
             simulationContainer.startAnimation(animTop)
@@ -240,6 +250,27 @@ class HomeFragment : Fragment() {
 
         return view
     }
+
+    private fun updateSimulationResult(
+        view: View,
+        selectedTenor: Int,
+        selectedAmount: Int,
+        bungaPerBulan: Double,
+        biayaAdmin: Double
+    ) {
+        val totalBunga = selectedAmount * bungaPerBulan * selectedTenor
+        val totalPembayaran = selectedAmount + totalBunga + biayaAdmin
+        val cicilanBulanan = totalPembayaran / selectedTenor
+
+        view.findViewById<TextView>(R.id.txtTenor).text = "$selectedTenor Bulan"
+        view.findViewById<TextView>(R.id.txtPinjaman).text = "Rp ${selectedAmount.formatRupiah()}"
+        view.findViewById<TextView>(R.id.txtRate).text = "${(bungaPerBulan * 100)}%"
+        view.findViewById<TextView>(R.id.txtCicilanBulanan).text = "Rp ${cicilanBulanan.toInt().formatRupiah()}"
+        view.findViewById<TextView>(R.id.txtTotalPembayaran).text = "Rp ${totalPembayaran.toInt().formatRupiah()}"
+        view.findViewById<TextView>(R.id.txtBiayaBunga).text = "Rp ${totalBunga.toInt().formatRupiah()}"
+        view.findViewById<TextView>(R.id.txtBiayaAdmin).text = "Rp ${biayaAdmin.toInt().formatRupiah()}"
+    }
+
 
     fun Int.formatRupiah(): String {
         val formatter = NumberFormat.getCurrencyInstance(Locale("in", "ID"))

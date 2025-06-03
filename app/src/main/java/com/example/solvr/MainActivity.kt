@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -103,6 +104,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         ApiClient.init(applicationContext)
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         // Set default fragment
         replaceFragment(HomeFragment())

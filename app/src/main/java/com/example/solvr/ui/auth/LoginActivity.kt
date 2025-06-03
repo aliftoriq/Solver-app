@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
-                //       Toast.makeText(this, "Gagal simpan token FCM", Toast.LENGTH_SHORT).show()
+                       Toast.makeText(this, "Gagal simpan token FCM", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -66,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
             progressBar.visibility = View.GONE
             btnLogin.isEnabled = true
             btnGoogleSignIn.isEnabled = true
-            //       Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show()
+                   Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show()
         }
 
         btnRegisterPage.setOnClickListener {
@@ -136,25 +136,25 @@ class LoginActivity : AppCompatActivity() {
                                 } else {
                                     progressBar.visibility = View.GONE
                                     btnGoogleSignIn.isEnabled = true
-                                    //       Toast.makeText(this, "Gagal mendapatkan Firebase token", Toast.LENGTH_SHORT).show()
+                                           Toast.makeText(this, "Gagal mendapatkan Firebase token", Toast.LENGTH_SHORT).show()
                                 }
                             }
 
                     }, { errorMsg ->
                         progressBar.visibility = View.GONE
                         btnGoogleSignIn.isEnabled = true
-                        //       Toast.makeText(this, "Login Google gagal: $errorMsg", Toast.LENGTH_SHORT).show()
+                               Toast.makeText(this, "Login Google gagal: $errorMsg", Toast.LENGTH_SHORT).show()
                     })
                 } else {
                     progressBar.visibility = View.GONE
                     btnGoogleSignIn.isEnabled = true
-                    //       Toast.makeText(this, "ID Token Google kosong", Toast.LENGTH_SHORT).show()
+                           Toast.makeText(this, "ID Token Google kosong", Toast.LENGTH_SHORT).show()
                 }
 
             } catch (e: Exception) {
                 progressBar.visibility = View.GONE
                 btnGoogleSignIn.isEnabled = true
-                //       Toast.makeText(this, "Login Google error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                       Toast.makeText(this, "Login Google error: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -184,7 +184,7 @@ class LoginActivity : AppCompatActivity() {
         if (needsPassword) {
             startActivity(Intent(this, SetPasswordActivity::class.java))
         } else {
-            //       Toast.makeText(this, "${user.name} Berhasil Login", Toast.LENGTH_SHORT).show()
+                   Toast.makeText(this, "${user.name} Berhasil Login", Toast.LENGTH_SHORT).show()
 
             // Kirim FCM token ke server
             FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
@@ -193,7 +193,7 @@ class LoginActivity : AppCompatActivity() {
                     Log.d("FCM_TokenDebug", "Token: $fcmToken")
                     viewModel.sendFcmToken(fcmToken)
                 } else {
-                    //       Toast.makeText(this, "Gagal ambil FCM token", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Gagal ambil FCM token", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 }

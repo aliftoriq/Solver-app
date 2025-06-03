@@ -47,6 +47,8 @@ class HistoryFragment : Fragment() {
         adapter = HistoryAdapter(emptyList())
         recyclerView.adapter = adapter
 
+        val tvTidakAdaData = view.findViewById<TextView>(R.id.tvTidakAdaData)
+
         viewModel.fetchHistory()
 
         viewModel.loanHistory.observe(viewLifecycleOwner) { history ->
@@ -54,7 +56,7 @@ class HistoryFragment : Fragment() {
                 recyclerView.startAnimation(animBottom)
                 adapter.updateData(history)
             } else {
-                val tvTidakAdaData = view.findViewById<TextView>(R.id.tvTidakAdaData)
+
                 tvTidakAdaData.visibility = View.VISIBLE
                 tvTidakAdaData.startAnimation(animBottom)
                 showError("No loan history available")
@@ -63,6 +65,8 @@ class HistoryFragment : Fragment() {
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
             showError(errorMessage)
+            tvTidakAdaData.startAnimation(animBottom)
+            showError("No loan history available")
         }
     }
 

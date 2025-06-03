@@ -97,4 +97,11 @@ dependencies {
 
 
 //    implementation(libs.play.services.location)
+
+    // Unit Test
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.livedata.testing)
 }

@@ -31,6 +31,7 @@ class HistoryViewModel : ViewModel() {
                         _errorMessage.postValue("Data is empty or null")
                     }
                 } else {
+
                     _errorMessage.postValue("Failed to load loan history: ${response.code()} ${response.message()}")
                 }
             }

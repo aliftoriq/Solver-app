@@ -77,6 +77,16 @@ class LoanDTO {
         val longitude: Any? = null
     )
 
+    data class SimulasiResult(
+        val pinjaman: Int,
+        val tenor: Int,
+        val ratePerBulan: Double,
+        val bunga: Int,
+        val admin: Int,
+        val cicilanBulanan: Int,
+        val totalPembayaran: Int
+    )
+
     data class DataItem(
         val housingStatus: String? = null,
         val latitude: Any? = null,
